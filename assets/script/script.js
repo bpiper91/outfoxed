@@ -3,7 +3,7 @@
 // Open Trivia Database API request variables
 var openTdbUrl = "https://opentdb.com/api.php?";
 var numQuestions = 6; // number of questions to request from Open Trivia Database
-// IMPORTANT: set numQuestions to 10 when finished testing
+// IMPORTANT: set numQuestions to 10 (or whatever) when finished testing
 var questCategory = 27 // 27 is the animals category
 
 // quiz questions
@@ -55,7 +55,7 @@ var getQuestions = function (difficulty) {
                     };
 
                     // wait for API call to get questions before starting game
-                    setTimeout (startGame(), 1000);
+                    setTimeout(startGame(), 1000);
                 });
             } else {
                 // need to add error message
@@ -73,6 +73,9 @@ var getQuestions = function (difficulty) {
 var startGame = function () {
     // reset current question number
     currentQuestion = 0;
+
+    // reset earned foxes
+    earnedFoxes.length = 0;
 
     // clear main element
     $("main").html("");
@@ -344,16 +347,53 @@ var endGame = function () {
     // create text div
     var endgameTextDiv = document.createElement("div");
     endgameTextDiv.className = "endgame-text";
-    
+
     if (earnedFoxes.length > 0) {
         // add success text
-        endgameTextDiv.innerText = "Well done! Here are the foxes you earned:";
+        endgameTextDiv.innerHTML = "<p>Well done! The foxes you earned are shown below.</p>";
+    } else {
+        // add failure text
+        endgameTextDiv.innerHTML = "<p>Sorry, you didn't earn any foxes this time.</p>";
+    };
+    // append endgame text div to main
+    document.querySelector("main").appendChild(endgameTextDiv);
 
-        // append endgame text div to main
-        document.querySelector("main").appendChild(endgameTextDiv);
+    // display difficulty selector and start button to start new 
+    // create div to contain select and button
+    var newGameDiv = document.createElement("div");
+    newGameDiv.className = "new-game";
+    newGameDiv.innerHTML = "<p>Want to play again?</p>";
 
-        // display each fox photo in a div
-        // create div
+    // create label
+    var difficultyLabel = document.createElement("label");
+    difficultyLabel.setAttribute("for", "new-difficulty");
+    difficultyLabel.innerText = "Choose your difficulty:";
+    // add label to new game div
+    newGameDiv.appendChild(difficultyLabel);
+
+    // create select
+    var selectDifficulty = document.createElement("select");
+    selectDifficulty.setAttribute("id", "new-difficulty");
+    selectDifficulty.setAttribute("name", "new-difficulty");
+    selectDifficulty.innerHTML = "<option value='easy'>Easy</option><option value='medium'>Medium</option><option value='hard'>Hard</option><option value='random'>Random</option>"
+    // add select to new game div
+    newGameDiv.appendChild(selectDifficulty);
+
+    // create button
+    var newGameButton = document.createElement("button");
+    newGameButton.setAttribute("type", "btn");
+    newGameButton.setAttribute("id", "start-new");
+    newGameButton.setAttribute("class", "start");
+    newGameButton.innerText = "New Game";
+    // add button to new game div
+    newGameDiv.appendChild(newGameButton);
+
+    // add new game div to main
+    document.querySelector("main").appendChild(newGameDiv);
+
+    if (earnedFoxes.length > 0) {
+        // if fox photos were earned, display each one in a div
+        // create container div
         var foxPhotosDiv = document.createElement("div");
         foxPhotosDiv.className = "endgame-fox-photos";
 
@@ -376,28 +416,20 @@ var endGame = function () {
 
         // add all fox photos to page
         document.querySelector("main").appendChild(foxPhotosDiv);
-
-    } else {
-        // add failure text
-        endgameTextDiv.innerHTML = "<p>Sorry, you didn't earn any foxes this time.</p>";
-
-        // append endgame text div to main
-        document.querySelector("main").appendChild(endgameTextDiv);
     };
 
     // check localstorage for stored fox photos and give option to display those
-        // IMPORTANT: add this content later
+    // IMPORTANT: add this content later
 
-    // display difficulty selector and start button to start new game
-    // add event listener for start button to start a new game
-        // IMPORTANT: add this content later
-
-
-
+    // add listener for new game button
+    $("#start-new").on("click", function (event) {
+        var difficulty = $("#new-difficulty").val();
+        getQuestions(difficulty);
+    });
 }
 
 // add listener for start button to start game
-$(".start").on("click", function(event) {
+$(".start").on("click", function (event) {
     var difficulty = $("#difficulty").val();
     getQuestions(difficulty);
 });
