@@ -7,7 +7,7 @@ var questCategory = 27 // 27 is the animals category
 var questionsList = [];
 var currentQuestion = 0;
 
-var getQuestions = function(difficulty) {
+var getQuestions = function (difficulty) {
     // get difficulty selection
     // if the selected difficulty is easy, medium, or hard, create a parameter for the query URL
     if (difficulty !== "random") {
@@ -20,48 +20,48 @@ var getQuestions = function(difficulty) {
     // API request to Open Trivia Database
     fetch(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
         // difficulty can be set to random (default), easy, medium, or hard
-    .then(function (response) {
-        if (response.ok) {
-            // if response is good, get the data
-            response.json().then(function (data) {
-                // clear old questions
-                questionsList.length = 0;
-                // store new questions
-                for (i = 0; i < numQuestions; i++) {
-                    // get data for each question and add it to questions list
-                    
-                    // copy each question's incorrect answers to an array
-                    var tempArray = [];
-                    for (j = 0; j < data.results[i].incorrect_answers.length; j++) {
-                        tempArray.push(data.results[i].incorrect_answers[j])
-                    };
+        .then(function (response) {
+            if (response.ok) {
+                // if response is good, get the data
+                response.json().then(function (data) {
+                    // clear old questions
+                    questionsList.length = 0;
+                    // store new questions
+                    for (i = 0; i < numQuestions; i++) {
+                        // get data for each question and add it to questions list
 
-                    // make a new object with each question's info
-                    var newQuestion = {
-                        'number': i.toString(),
-                        'question': data.results[i].question,
-                        'correct': data.results[i].correct_answer,
-                        'incorrect': tempArray
-                    };
-                    // add the question info to the question list
-                    questionsList.push(newQuestion);
+                        // copy each question's incorrect answers to an array
+                        var tempArray = [];
+                        for (j = 0; j < data.results[i].incorrect_answers.length; j++) {
+                            tempArray.push(data.results[i].incorrect_answers[j])
+                        };
 
-                    $(".start").on("click", startGame);
-                };
-            });
-        } else {
+                        // make a new object with each question's info
+                        var newQuestion = {
+                            'number': i.toString(),
+                            'question': data.results[i].question,
+                            'correct': data.results[i].correct_answer,
+                            'incorrect': tempArray
+                        };
+                        // add the question info to the question list
+                        questionsList.push(newQuestion);
+
+                        $(".start").on("click", startGame);
+                    };
+                });
+            } else {
+                // need to add error message
+                console.log("The page encountered an error retrieving questions.");
+            };
+            console.log(questionsList);
+        })
+        .catch(function (error) {
             // need to add error message
-            console.log("The page encountered an error retrieving questions.");
-        };
-        console.log(questionsList);
-    })
-    .catch(function (error) {
-        // need to add error message
-        console.log("Please check your connection and try again.");
-    });
+            console.log("Please check your connection and try again.");
+        });
 };
 
-var startGame = function() {
+var startGame = function () {
     // reset current question number
     currentQuestion = 0;
 
@@ -75,43 +75,94 @@ var startGame = function() {
     var questionTextDiv = document.createElement("div")
     questionTextDiv.className = "question";
     var questionNum = parseInt(questionsList[currentQuestion].number) + 1;
-    questionTextDiv.textContent = questionNum + ". " + questionsList[currentQuestion].question;
+    questionTextDiv.innerHTML = questionNum + ". " + questionsList[currentQuestion].question;
     // append question div to main element
     document.querySelector("main").appendChild(questionTextDiv);
 
-    // randomize answer choices
-    // set array for answer choices with correct last
-    var allChoices = []
-    // set array for answer choices in random order
-    var answerChoices = []
+    // get and store the number of answer choices for the question
+    var numChoices = questionsList[currentQuestion].incorrect.length + 1;
 
-    // populate allChoices array
-    for (i = 0; i < questionsList[currentQuestion].incorrect.length; i++) {
-        allChoices.push(questionsList[currentQuestion].incorrect[i]);
+    if (questionsList[currentQuestion].correct !== "True" && questionsList[currentQuestion].correct !== "False") {
+        // randomize answer choices
+        // create array to hold each answer choice number
+        var choiceNumbers = [];
+        // push each answer choice number into array
+        for (i = 0; i < numChoices; i++) {
+            choiceNumbers.push(i);
+        };
+
+        // create array to hold random order of choices
+        var choiceOrder = [];
+        var choicesLeft = numChoices;
+        // push choices into array
+        for (i = 0; i < numChoices; i++) {
+            var randomIndex = Math.floor(Math.random() * choicesLeft);
+            if (parseInt(choiceNumbers[randomIndex]) === numChoices - 1) {
+                // if the chosen question number is the highest in the array, push "correct"
+                choiceOrder.push("correct");
+                choiceNumbers.splice(randomIndex, 1);
+                choicesLeft = choicesLeft - 1;
+            } else {
+                // otherwise, push the number at that index
+                choiceOrder.push(choiceNumbers[randomIndex]);
+                choiceNumbers.splice(randomIndex, 1);
+                choicesLeft = choicesLeft - 1;
+            };
+        };
     };
-    allChoices.push(questionsList[currentQuestion].correct);
 
-    // populate answerChoices array
-    // get number of choices to use in for loop
-    var numChoices = allChoices.length;
-    // in random order, push each choice to the new array
-    for (i = 0; i < numChoices; i++) {
-        var randomIndex = Math.floor(Math.random() * allChoices.length);
-        answerChoices.push(allChoices[randomIndex]);
-        allChoices.splice(randomIndex, 1);
-    };
-
+    // populate answer choices
     // create answer choices div
-    var answerChoicesDiv = document.createElement("div")
-    questionTextDiv.className = "answer-choices"
-    
-    // add randomized answer choices to answer choices div
-    for (i = 0; i < answerChoices.length; i++) {
-        var answerChoiceBtn = document.createElement("button");
-        answerChoiceBtn.innerHTML = answerChoices[i];
-        answerChoiceBtn.className = "choice btn";
-        answerChoiceBtn.setAttribute("type", "button");
-        answerChoicesDiv.appendChild(answerChoiceBtn);
+    var answerChoicesDiv = document.createElement("div");
+    answerChoicesDiv.className = "answer-choices";
+
+    // add answer choices to answer choices div
+    if (questionsList[currentQuestion].correct === "True" || questionsList[currentQuestion].correct === "False") {
+        // if it's a true/false question, add True answer choice
+        var singleChoiceDiv = document.createElement("div");
+        singleChoiceDiv.className = "choice";
+        singleChoiceDiv.innerText = "True";
+        // check correct answer and add appropriate data attribute
+        if (questionsList[currentQuestion].correct === "True") {
+            singleChoiceDiv.setAttribute("data-correct", "correct");
+        } else {
+            singleChoiceDiv.setAttribute("data-correct", "incorrect");
+        };
+        // append the answer choice to the answer choices div
+        answerChoicesDiv.appendChild(singleChoiceDiv);
+
+        // add False answer choice
+        var singleChoiceDiv = document.createElement("div");
+        singleChoiceDiv.className = "choice";
+        singleChoiceDiv.innerText = "False";
+        // check correct answer and add appropriate data attribute
+        if (questionsList[currentQuestion].correct === "False") {
+            singleChoiceDiv.setAttribute("data-correct", "correct");
+        } else {
+            singleChoiceDiv.setAttribute("data-correct", "incorrect");
+        };
+
+        // append the answer choice to the answer choices div
+        answerChoicesDiv.appendChild(singleChoiceDiv);
+
+    } else {
+        // if it's a multiple choice question, add answer choices one by one
+        for (i = 0; i < numChoices; i++) {
+            var singleChoiceDiv = document.createElement("div");
+            singleChoiceDiv.className = "choice";
+            
+            // for each answer choice, add a data attribute based on whether it's the correct answer
+            if (choiceOrder[i] === "correct") {
+                singleChoiceDiv.innerHTML = questionsList[currentQuestion].correct;
+                singleChoiceDiv.setAttribute("data-correct", "correct");
+            } else {
+                singleChoiceDiv.innerHTML = questionsList[currentQuestion].incorrect[choiceOrder[i]];
+                singleChoiceDiv.setAttribute("data-correct", "incorrect");
+            };
+
+            // append choice to answer choices div
+            answerChoicesDiv.appendChild(singleChoiceDiv);
+        };
     };
 
     // append answer choices div to main
@@ -122,18 +173,18 @@ var startGame = function() {
 };
 
 var checkAnswer = function (event) {
-    debugger;
     // function to check 
-    if ($(this).children("button").text() === questionsList[currentQuestion].correct) {
+    if (event.target.dataset.correct === "correct") {
+        console.log(event.target.dataset.correct);
         // what happens if the answer is correct
         console.log("correct");
     } else {
+        console.log(event.target.dataset.correct);
         // what happens if the answer is incorrect
         console.log("incorrect");
     };
 };
 
 getQuestions("easy");
-
 
 
