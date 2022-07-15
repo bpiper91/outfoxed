@@ -1,32 +1,13 @@
+// Brett's Note: search for "IMPORTANT" to find unfinished/hard-coded sections that will need to be changed
+
 // Open Trivia Database API request variables
 var openTdbUrl = "https://opentdb.com/api.php?";
-var numQuestions = 10; // number of questions to request
+var numQuestions = 6; // number of questions to request from Open Trivia Database
+// IMPORTANT: set numQuestions to 10 when finished testing
 var questCategory = 27 // 27 is the animals category
 
 // quiz questions
-    // IMPORTANT: set questionsList to empty array when testing is done
-    // IMPORTANT: un-comment portion of getQuestions that calls the API when testing is done
-var questionsList = [
-    {
-        number: "0",
-        question: "A slug&rsquo;s blood is green.",
-        correct: "True",
-        incorrect: ["False"],
-
-    },
-    {
-        number: "1",
-        question: "What is the scientific name for modern day humans?",
-        correct: "Homo Sapiens",
-        incorrect: ['Homo Ergaster', 'Homo Erectus', 'Homo Neanderthalensis'],
-    },
-    {
-        number: "2",
-        question: "How many legs do butterflies have?",
-        correct: "6",
-        incorrect: ["2", "4", "0"],
-    },
-];
+var questionsList = [];
 var currentQuestion = 0;
 
 // fox photos
@@ -42,49 +23,51 @@ var getQuestions = function (difficulty) {
         // if the selected difficulty was random, don't add anything to query URL
         questDifficulty = "";
     };
-    // console.log(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
-    // // API request to Open Trivia Database
-    // fetch(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
-    //     // difficulty can be set to random (default), easy, medium, or hard
-    //     .then(function (response) {
-    //         if (response.ok) {
-    //             // if response is good, get the data
-    //             response.json().then(function (data) {
-    //                 // clear old questions
-    //                 questionsList.length = 0;
-    //                 // store new questions
-    //                 for (i = 0; i < numQuestions; i++) {
-    //                     // get data for each question and add it to questions list
+    // IMPORTANT: the code below in this function needs to be un-commented after testing is finished
+    // API request to Open Trivia Database
+    fetch(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
+        // difficulty can be set to random (default), easy, medium, or hard
+        .then(function (response) {
+            if (response.ok) {
+                // if response is good, get the data
+                response.json().then(function (data) {
+                    // clear old questions
+                    questionsList.length = 0;
+                    // store new questions
+                    for (i = 0; i < numQuestions; i++) {
+                        // get data for each question and add it to questions list
 
-    //                     // copy each question's incorrect answers to an array
-    //                     var tempArray = [];
-    //                     for (j = 0; j < data.results[i].incorrect_answers.length; j++) {
-    //                         tempArray.push(data.results[i].incorrect_answers[j])
-    //                     };
+                        // copy each question's incorrect answers to an array
+                        var tempArray = [];
+                        for (j = 0; j < data.results[i].incorrect_answers.length; j++) {
+                            tempArray.push(data.results[i].incorrect_answers[j])
+                        };
 
-    //                     // make a new object with each question's info
-    //                     var newQuestion = {
-    //                         'number': i.toString(),
-    //                         'question': data.results[i].question,
-    //                         'correct': data.results[i].correct_answer,
-    //                         'incorrect': tempArray
-    //                     };
-    //                     // add the question info to the question list
-    //                     questionsList.push(newQuestion);
+                        // make a new object with each question's info
+                        var newQuestion = {
+                            'number': i.toString(),
+                            'question': data.results[i].question,
+                            'correct': data.results[i].correct_answer,
+                            'incorrect': tempArray
+                        };
+                        // add the question info to the question list
+                        questionsList.push(newQuestion);
+                    };
 
-                         $(".start").on("click", startGame);
-    //                 };
-    //             });
-    //         } else {
-    //             // need to add error message
-    //             console.log("The page encountered an error retrieving questions.");
-    //         };
-    //         console.log(questionsList);
-    //     })
-    //     .catch(function (error) {
-    //         // need to add error message
-    //         console.log("Please check your connection and try again.");
-    //     });
+                    // wait for API call to get questions before starting game
+                    setTimeout (startGame(), 1000);
+                });
+            } else {
+                // need to add error message
+                console.log("The page encountered an error retrieving questions.");
+                // IMPORTANT: add a modal to alert the user of the error
+            };
+        })
+        .catch(function (error) {
+            // need to add error message
+            console.log("Please check your connection and try again.");
+            // IMPORTANT: add a modal to alert the user of the error
+        })
 };
 
 var startGame = function () {
@@ -177,7 +160,7 @@ var startGame = function () {
         for (i = 0; i < numChoices; i++) {
             var singleChoiceDiv = document.createElement("div");
             singleChoiceDiv.className = "choice";
-            
+
             // for each answer choice, add a data attribute based on whether it's the correct answer
             if (choiceOrder[i] === "correct") {
                 singleChoiceDiv.innerHTML = questionsList[currentQuestion].correct;
@@ -192,7 +175,7 @@ var startGame = function () {
         };
     };
 
-    // append answer choices div to main
+    // add answer choices div to main
     document.querySelector("main").appendChild(answerChoicesDiv);
 
     // create and add photo div for feedback when a question is answered
@@ -211,7 +194,7 @@ var checkAnswer = function (event) {
         // if the answer was correct, get fox photo and display to page with success message
         // var foxPhotoUrl = getFoxPhoto();
         var foxPhotoUrl = "https://randomfox.ca/images/26.jpg"
-            // IMPORTANT: set foxPhotoUrl to getFoxPhoto() after testing
+        // IMPORTANT: set foxPhotoUrl to getFoxPhoto() after testing
 
         // clear existing fox photo and/or message
         document.querySelector(".photo").innerHTML = "";
@@ -233,10 +216,10 @@ var checkAnswer = function (event) {
 
         // store fox in global array
         earnedFoxes.push(foxPhotoUrl);
-        console.log(earnedFoxes);
 
         // store fox in localStorage
-        
+        // IMPORTANT: add this feature later
+
     } else {
         // clear existing fox photo and/or message
         document.querySelector(".photo").innerHTML = "";
@@ -244,22 +227,180 @@ var checkAnswer = function (event) {
         // if the answer was incorrect, display a failure message
         var failureMessage = document.createElement("div");
         failureMessage.className = "feedback failure";
-        failureMessage.innerText
+        failureMessage.innerHTML = "Sorry, the correct answer was " + questionsList[currentQuestion].correct + ".";
 
         // add failure message to page
         document.querySelector(".photo").appendChild(failureMessage);
     };
 
-    // // load next question
-    // nextQuestion();
+    // load next question
+    nextQuestion();
 };
 
-// var nextQuestion = function() {
+// load each subsequent question after first one
+var nextQuestion = function () {
+    currentQuestion = currentQuestion + 1
 
-// }
+    // if there are no more questions, end the game after 3.5 seconds
+    if (!questionsList[currentQuestion]) {
+        endGame();
+    } else {
+        // if there are more questions, display next question
+        // update question text
+        var questionNum = parseInt(questionsList[currentQuestion].number) + 1;
+        document.querySelector(".question").innerHTML = questionNum + ". " + questionsList[currentQuestion].question;
 
-getQuestions("easy");
+        // update answer choices
+        // clear previous answer choices
+        document.querySelector(".answer-choices").innerHTML = "";
 
+        // get and store the number of answer choices for the question
+        var numChoices = questionsList[currentQuestion].incorrect.length + 1;
+
+        if (questionsList[currentQuestion].correct !== "True" && questionsList[currentQuestion].correct !== "False") {
+            // randomize answer choices
+            // create array to hold each answer choice number
+            var choiceNumbers = [];
+            // push each answer choice number into array
+            for (i = 0; i < numChoices; i++) {
+                choiceNumbers.push(i);
+            };
+
+            // create array to hold random order of choices
+            var choiceOrder = [];
+            var choicesLeft = numChoices;
+            // push choices into array
+            for (i = 0; i < numChoices; i++) {
+                var randomIndex = Math.floor(Math.random() * choicesLeft);
+                if (parseInt(choiceNumbers[randomIndex]) === numChoices - 1) {
+                    // if the chosen question number is the highest in the array, push "correct"
+                    choiceOrder.push("correct");
+                    choiceNumbers.splice(randomIndex, 1);
+                    choicesLeft = choicesLeft - 1;
+                } else {
+                    // otherwise, push the number at that index
+                    choiceOrder.push(choiceNumbers[randomIndex]);
+                    choiceNumbers.splice(randomIndex, 1);
+                    choicesLeft = choicesLeft - 1;
+                };
+            };
+        };
+
+        // add answer choices to answer choices div
+        if (questionsList[currentQuestion].correct === "True" || questionsList[currentQuestion].correct === "False") {
+            // if it's a true/false question, add True answer choice
+            var singleChoiceDiv = document.createElement("div");
+            singleChoiceDiv.className = "choice";
+            singleChoiceDiv.innerText = "True";
+            // check correct answer and add appropriate data attribute
+            if (questionsList[currentQuestion].correct === "True") {
+                singleChoiceDiv.setAttribute("data-correct", "correct");
+            } else {
+                singleChoiceDiv.setAttribute("data-correct", "incorrect");
+            };
+            // append the answer choice to the answer choices div
+            document.querySelector(".answer-choices").appendChild(singleChoiceDiv);
+
+            // add False answer choice
+            var singleChoiceDiv = document.createElement("div");
+            singleChoiceDiv.className = "choice";
+            singleChoiceDiv.innerText = "False";
+            // check correct answer and add appropriate data attribute
+            if (questionsList[currentQuestion].correct === "False") {
+                singleChoiceDiv.setAttribute("data-correct", "correct");
+            } else {
+                singleChoiceDiv.setAttribute("data-correct", "incorrect");
+            };
+
+            // append the answer choice to the answer choices div
+            document.querySelector(".answer-choices").appendChild(singleChoiceDiv);
+
+        } else {
+            // if it's a multiple choice question, add answer choices one by one
+            for (i = 0; i < numChoices; i++) {
+                var singleChoiceDiv = document.createElement("div");
+                singleChoiceDiv.className = "choice";
+
+                // for each answer choice, add a data attribute based on whether it's the correct answer
+                if (choiceOrder[i] === "correct") {
+                    singleChoiceDiv.innerHTML = questionsList[currentQuestion].correct;
+                    singleChoiceDiv.setAttribute("data-correct", "correct");
+                } else {
+                    singleChoiceDiv.innerHTML = questionsList[currentQuestion].incorrect[choiceOrder[i]];
+                    singleChoiceDiv.setAttribute("data-correct", "incorrect");
+                };
+
+                // append choice to answer choices div
+                document.querySelector(".answer-choices").appendChild(singleChoiceDiv);
+            };
+        };
+    };
+};
+
+var endGame = function () {
+    // clear main
+    $("main").html("");
+
+    // create text div
+    var endgameTextDiv = document.createElement("div");
+    endgameTextDiv.className = "endgame-text";
+    
+    if (earnedFoxes.length > 0) {
+        // add success text
+        endgameTextDiv.innerText = "Well done! Here are the foxes you earned:";
+
+        // append endgame text div to main
+        document.querySelector("main").appendChild(endgameTextDiv);
+
+        // display each fox photo in a div
+        // create div
+        var foxPhotosDiv = document.createElement("div");
+        foxPhotosDiv.className = "endgame-fox-photos";
+
+        // put each photo in a div and add it
+        for (i = 0; i < earnedFoxes.length; i++) {
+            // create div to hold photo
+            var singlePhotoDiv = document.createElement("div");
+            singlePhotoDiv.className = "endgame-photo";
+
+            var foxPhotoImg = document.createElement("img");
+            foxPhotoImg.className = "endgame-img";
+            foxPhotoImg.src = earnedFoxes[i];
+            foxPhotoImg.setAttribute("alt", "photo of a fox");
+            // add photo to div
+            singlePhotoDiv.appendChild(foxPhotoImg);
+
+            // add single photo div to photos div
+            foxPhotosDiv.appendChild(singlePhotoDiv);
+        };
+
+        // add all fox photos to page
+        document.querySelector("main").appendChild(foxPhotosDiv);
+
+    } else {
+        // add failure text
+        endgameTextDiv.innerHTML = "<p>Sorry, you didn't earn any foxes this time.</p>";
+
+        // append endgame text div to main
+        document.querySelector("main").appendChild(endgameTextDiv);
+    };
+
+    // check localstorage for stored fox photos and give option to display those
+        // IMPORTANT: add this content later
+
+    // display difficulty selector and start button to start new game
+    // add event listener for start button to start a new game
+        // IMPORTANT: add this content later
+
+
+
+}
+
+// add listener for start button to start game
+$(".start").on("click", function(event) {
+    var difficulty = $("#difficulty").val();
+    getQuestions(difficulty);
+});
 
 
 

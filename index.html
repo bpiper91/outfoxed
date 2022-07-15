@@ -12,7 +12,16 @@
 
 <body>
   <main>
-    <button type="btn" class="start" >start</button>
+    <div class="start-game">
+      <label for="difficulty">Choose your difficulty:</label>
+      <select id="difficulty" name="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+        <option value="random">Random</option>
+      </select>
+      <button type="btn" class="start" >Start Game</button>
+    </div>
   </main>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
