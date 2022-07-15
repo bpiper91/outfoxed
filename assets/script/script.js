@@ -48,11 +48,15 @@ var getQuestions = function(difficulty) {
             });
         } else {
             // need to add error message
-            console.log(error);
+            console.log("The page encountered an error retrieving questions.");
         };
         console.log(questionsList);
+    })
+    .catch(function (error) {
+        // need to add error message
+        console.log("Please check your connection and try again.");
     });
-}
+};
 
 getQuestions("easy");
 
