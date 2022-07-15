@@ -4,9 +4,35 @@ var numQuestions = 10; // number of questions to request
 var questCategory = 27 // 27 is the animals category
 
 // quiz questions
-var questionsList = [];
+    // IMPORTANT: set questionsList to empty array when testing is done
+    // IMPORTANT: un-comment portion of getQuestions that calls the API when testing is done
+var questionsList = [
+    {
+        number: "0",
+        question: "A slug&rsquo;s blood is green.",
+        correct: "True",
+        incorrect: ["False"],
+
+    },
+    {
+        number: "1",
+        question: "What is the scientific name for modern day humans?",
+        correct: "Homo Sapiens",
+        incorrect: ['Homo Ergaster', 'Homo Erectus', 'Homo Neanderthalensis'],
+    },
+    {
+        number: "2",
+        question: "How many legs do butterflies have?",
+        correct: "6",
+        incorrect: ["2", "4", "0"],
+    },
+];
 var currentQuestion = 0;
 
+// fox photos
+var earnedFoxes = [];
+
+// get new questions from Open Trivia Database based on selected difficulty
 var getQuestions = function (difficulty) {
     // get difficulty selection
     // if the selected difficulty is easy, medium, or hard, create a parameter for the query URL
@@ -16,49 +42,49 @@ var getQuestions = function (difficulty) {
         // if the selected difficulty was random, don't add anything to query URL
         questDifficulty = "";
     };
-    console.log(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
-    // API request to Open Trivia Database
-    fetch(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
-        // difficulty can be set to random (default), easy, medium, or hard
-        .then(function (response) {
-            if (response.ok) {
-                // if response is good, get the data
-                response.json().then(function (data) {
-                    // clear old questions
-                    questionsList.length = 0;
-                    // store new questions
-                    for (i = 0; i < numQuestions; i++) {
-                        // get data for each question and add it to questions list
+    // console.log(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
+    // // API request to Open Trivia Database
+    // fetch(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
+    //     // difficulty can be set to random (default), easy, medium, or hard
+    //     .then(function (response) {
+    //         if (response.ok) {
+    //             // if response is good, get the data
+    //             response.json().then(function (data) {
+    //                 // clear old questions
+    //                 questionsList.length = 0;
+    //                 // store new questions
+    //                 for (i = 0; i < numQuestions; i++) {
+    //                     // get data for each question and add it to questions list
 
-                        // copy each question's incorrect answers to an array
-                        var tempArray = [];
-                        for (j = 0; j < data.results[i].incorrect_answers.length; j++) {
-                            tempArray.push(data.results[i].incorrect_answers[j])
-                        };
+    //                     // copy each question's incorrect answers to an array
+    //                     var tempArray = [];
+    //                     for (j = 0; j < data.results[i].incorrect_answers.length; j++) {
+    //                         tempArray.push(data.results[i].incorrect_answers[j])
+    //                     };
 
-                        // make a new object with each question's info
-                        var newQuestion = {
-                            'number': i.toString(),
-                            'question': data.results[i].question,
-                            'correct': data.results[i].correct_answer,
-                            'incorrect': tempArray
-                        };
-                        // add the question info to the question list
-                        questionsList.push(newQuestion);
+    //                     // make a new object with each question's info
+    //                     var newQuestion = {
+    //                         'number': i.toString(),
+    //                         'question': data.results[i].question,
+    //                         'correct': data.results[i].correct_answer,
+    //                         'incorrect': tempArray
+    //                     };
+    //                     // add the question info to the question list
+    //                     questionsList.push(newQuestion);
 
-                        $(".start").on("click", startGame);
-                    };
-                });
-            } else {
-                // need to add error message
-                console.log("The page encountered an error retrieving questions.");
-            };
-            console.log(questionsList);
-        })
-        .catch(function (error) {
-            // need to add error message
-            console.log("Please check your connection and try again.");
-        });
+                         $(".start").on("click", startGame);
+    //                 };
+    //             });
+    //         } else {
+    //             // need to add error message
+    //             console.log("The page encountered an error retrieving questions.");
+    //         };
+    //         console.log(questionsList);
+    //     })
+    //     .catch(function (error) {
+    //         // need to add error message
+    //         console.log("Please check your connection and try again.");
+    //     });
 };
 
 var startGame = function () {
@@ -69,6 +95,7 @@ var startGame = function () {
     $("main").html("");
 
     // if New Game button exists, replace it with My Foxes button and add listener for My Foxes button
+    // IMPORTANT: add this code block later
 
     // load first question
     // create question div and add question text
@@ -168,23 +195,74 @@ var startGame = function () {
     // append answer choices div to main
     document.querySelector("main").appendChild(answerChoicesDiv);
 
-    // add listener for ans"wer choices
+    // create and add photo div for feedback when a question is answered
+    var photoDiv = document.createElement("div");
+    photoDiv.className = "photo";
+    photoDiv.innerHTML = "";
+    document.querySelector("main").appendChild(photoDiv);
+
+    // add listener for answer choices
     $(".answer-choices").on("click", checkAnswer);
 };
 
+// check for right/wrong answer, display feedback, and store fox photo
 var checkAnswer = function (event) {
-    // function to check 
     if (event.target.dataset.correct === "correct") {
-        console.log(event.target.dataset.correct);
-        // what happens if the answer is correct
-        console.log("correct");
+        // if the answer was correct, get fox photo and display to page with success message
+        // var foxPhotoUrl = getFoxPhoto();
+        var foxPhotoUrl = "https://randomfox.ca/images/26.jpg"
+            // IMPORTANT: set foxPhotoUrl to getFoxPhoto() after testing
+
+        // clear existing fox photo and/or message
+        document.querySelector(".photo").innerHTML = "";
+
+        // create success message
+        var successMessage = document.createElement("div");
+        successMessage.className = "feedback success";
+        successMessage.innerText = "That's right! You earned a fox!";
+        // add to page
+        document.querySelector(".photo").appendChild(successMessage);
+
+        // create img element to display photo
+        var foxPhotoImg = document.createElement("img");
+        foxPhotoImg.className = "fox-photo-img";
+        foxPhotoImg.src = foxPhotoUrl;
+        foxPhotoImg.setAttribute("alt", "photo of a fox");
+        // add to page
+        document.querySelector(".photo").appendChild(foxPhotoImg);
+
+        // store fox in global array
+        earnedFoxes.push(foxPhotoUrl);
+        console.log(earnedFoxes);
+
+        // store fox in localStorage
+        
     } else {
-        console.log(event.target.dataset.correct);
-        // what happens if the answer is incorrect
-        console.log("incorrect");
+        // clear existing fox photo and/or message
+        document.querySelector(".photo").innerHTML = "";
+
+        // if the answer was incorrect, display a failure message
+        var failureMessage = document.createElement("div");
+        failureMessage.className = "feedback failure";
+        failureMessage.innerText
+
+        // add failure message to page
+        document.querySelector(".photo").appendChild(failureMessage);
     };
+
+    // // load next question
+    // nextQuestion();
 };
 
+// var nextQuestion = function() {
+
+// }
+
 getQuestions("easy");
+
+
+
+
+
 
 
