@@ -13,6 +13,9 @@ var currentQuestion = 0;
 // fox photos
 var earnedFoxes = [];
 
+// fox photo numberical array (stores numbers between 1-115 for fox photo url implementation)
+const imageNumber = [];
+
 // get new questions from Open Trivia Database based on selected difficulty
 var getQuestions = function (difficulty) {
     // get difficulty selection
@@ -189,15 +192,27 @@ var startGame = function () {
 
     // add listener for answer choices
     $(".answer-choices").on("click", checkAnswer);
-};
+}; 
 
 // check for right/wrong answer, display feedback, and store fox photo
 var checkAnswer = function (event) {
+
+    // loops through the imageNumber array 
+    for (var i=0, t=115; i<t; i++) {
+    imageNumber.push(Math.round(Math.random() * t))
+    };
+    
+    // pulls a single number from imageNumber array
+    const singleImageNumber = imageNumber[Math.floor(Math.random() * imageNumber.length)];
+    console.log(singleImageNumber);
+
     if (event.target.dataset.correct === "correct") {
         // if the answer was correct, get fox photo and display to page with success message
         // var foxPhotoUrl = getFoxPhoto();
-        var foxPhotoUrl = "https://randomfox.ca/images/26.jpg"
+        var foxPhotoUrl = "https://randomfox.ca/images/" + singleImageNumber + ".jpg"
         // IMPORTANT: set foxPhotoUrl to getFoxPhoto() after testing
+
+
 
         // clear existing fox photo and/or message
         document.querySelector(".photo").innerHTML = "";
@@ -239,7 +254,7 @@ var checkAnswer = function (event) {
     // load next question
     nextQuestion();
 };
-
+console.log(checkAnswer)
 // load each subsequent question after first one
 var nextQuestion = function () {
     currentQuestion = currentQuestion + 1
