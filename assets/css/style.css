@@ -7,7 +7,7 @@ html,
 body {
   height: 100%;
   text-align: center;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: sans-serif;
   background-color: rgb(246, 126, 14);
 }
 #logo {
@@ -21,4 +21,13 @@ body {
 
 #main {
   overflow: auto;
+}
+#instructions {
+  border: 6px solid black;
+  color: #121111;
+  font-size: 10px;
+  width: 100%;
+  position: relative;
+  display: inline-block;
+  height: auto;
 }
