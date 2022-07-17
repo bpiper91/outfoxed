@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>OutFox</title>
-    <link rel="stylesheet" href="assets\css\style.css" />
-  </head>
-  <body>
-    <header id="logo">OutFox</header>
-    <!--DivBoxes for images/game-->
-    <section>
-      <div class="placeholder">I am a place holder</div>
-      <div class="placeholder">I am a place holder</div>
-      <!--game buttons-->
-      <button id="playButton">Play</button>
-      <button id="clear">Clear</button>
-    </section>
-    <main>
-      <div class="start-game">
-        <label for="difficulty">Choose your difficulty:</label>
-        <select id="difficulty" name="difficulty">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-          <option value="random">Random</option>
-        </select>
-        <button type="btn" class="start">Start Game</button>
-      </div>
-    </main>
-    <section id="instructions">
-      <h2>Game Instructions</h2>
-      <p>
-        Answer questions about animals and earn a random photo of a fox. Every
-        photo you earn gets saved, so you can look at them all later.
-      </p>
-    </section>
 
-    <script
-      src="https://code.jquery.com/jquery-3.6.0.min.js"
-      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-      crossorigin="anonymous"
-    ></script>
-    <script src="./assets/script/script.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>OutFoxed</title>
+  <link rel="stylesheet" href="assets\css\style.css" />
+</head>
+
+<body>
+  <header id="logo">OutFoxed</header>
+  <main>
+    <!--DivBoxes for images/game-->
+    <div class="home-photo">
+      <!--image-->
+      <p>I am a place holder for a fox photo</p>
+      <img src="https://via.placeholder.com/500" alt="placeholder" class="home-fox" />
+    </div>
+    <div class="start-game">
+      <!--instructions-->
+      <section id="instructions">
+        <h2>Game Instructions</h2>
+        <p>
+          OutFoxed is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox.
+          Grow your collection of photos by answering as many questions as you can!
+        </p>
+        <p>
+          Click on [button in header to be added later] to see all the fox photos you've earned.
+        </p>
+      </section>
+      <!--game buttons-->
+      <label for="difficulty">Choose your difficulty:</label>
+      <select id="difficulty" name="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+        <option value="random">Random</option>
+      </select>
+      <button type="btn" class="start">Start Game</button>
+    </div>
+  </main>
+  <!--JS links-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="./assets/script/script.js"></script>
+</body>
+
 </html>
