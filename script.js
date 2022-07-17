@@ -12,7 +12,8 @@ var currentQuestion = 0;
 
 // fox photos
 var earnedFoxes = [];
-const imageNumArray = [];
+var pictureUrl = "https://randomfox.ca/floof/";
+var pictureNum = [];
 
 // get new questions from Open Trivia Database based on selected difficulty
 var getQuestions = function (difficulty) {
@@ -192,64 +193,76 @@ var startGame = function () {
     $(".answer-choices").on("click", checkAnswer);
 }; 
 
+var foxPicQuery = function () {
+
+    fetch(pictureUrl) 
+        .then((response) => {
+            if (response.ok) {
+                response.json().then(function (data) {
+                    // var foxQueryUrl = data.image;
+                    // console.log(foxQueryUrl);
+                    console.log(data.image);
+                    pictureNum.push(data.image);    
+                });
+            };
+        })
+        .catch(function (response) {
+            if(!response.ok) {
+                console.log("Fox Picture Query isn't working properly")
+            }
+        });
+        
+    return pictureNum[pictureNum.length - 1];
+};
+
 // check for right/wrong answer, display feedback, and store fox photo
 var checkAnswer = function (event) {
 
-var foxPicQuery =
-fetch("https://randomfox.ca/floof/")
-    .then(function (response) {
-        if (response.ok) {
-            response.json().then(function (data) {
-                var foxQueryUrl = data.image;
+    if (event.target.dataset.correct === "correct") {
+        // if the answer was correct, get fox photo and display to page with success message
+        // var foxPhotoUrl = getFoxPhoto();
+        
+        // IMPORTANT: set foxPhotoUrl to getFoxPhoto() after testing
+        
+        var foxPhotoUrl = foxPicQuery();
+        console.log(foxPhotoUrl);
+        // clear existing fox photo and/or message
+        document.querySelector(".photo").innerHTML = "";
 
-                if (event.target.dataset.correct === "correct") {
-                    // if the answer was correct, get fox photo and display to page with success message
-                    // var foxPhotoUrl = getFoxPhoto();
-                    
-                    // IMPORTANT: set foxPhotoUrl to getFoxPhoto() after testing
+        // create success message
+        var successMessage = document.createElement("div");
+        successMessage.className = "feedback success";
+        successMessage.innerText = "That's right! You earned a fox!";
+        // add to page
+        document.querySelector(".photo").appendChild(successMessage);
 
-                    var foxPhotoUrl = foxQueryUrl;
-                    // clear existing fox photo and/or message
-                    document.querySelector(".photo").innerHTML = "";
+        // create img element to display photo
+        var foxPhotoImg = document.createElement("img");
+        foxPhotoImg.className = "fox-photo-img";
+        foxPhotoImg.src = foxPhotoUrl;
+        foxPhotoImg.setAttribute("alt", "photo of a fox");
+        // add to page
+        document.querySelector(".photo").appendChild(foxPhotoImg);
 
-                    // create success message
-                    var successMessage = document.createElement("div");
-                    successMessage.className = "feedback success";
-                    successMessage.innerText = "That's right! You earned a fox!";
-                    // add to page
-                    document.querySelector(".photo").appendChild(successMessage);
+        // store fox in global array
+        earnedFoxes.push(foxPhotoUrl);
 
-                    // create img element to display photo
-                    var foxPhotoImg = document.createElement("img");
-                    foxPhotoImg.className = "fox-photo-img";
-                    foxPhotoImg.src = foxPhotoUrl;
-                    foxPhotoImg.setAttribute("alt", "photo of a fox");
-                    // add to page
-                    document.querySelector(".photo").appendChild(foxPhotoImg);
+        // store fox in localStorage
+        // IMPORTANT: add this feature later
 
-                    // store fox in global array
-                    earnedFoxes.push(foxPhotoUrl);
+    } else {
+        // clear existing fox photo and/or message
+        document.querySelector(".photo").innerHTML = "";
 
-                    // store fox in localStorage
-                    // IMPORTANT: add this feature later
+        // if the answer was incorrect, display a failure message
+        var failureMessage = document.createElement("div");
+        failureMessage.className = "feedback failure";
+        failureMessage.innerHTML = "Sorry, the correct answer was " + questionsList[currentQuestion].correct + ".";
 
-                } else {
-                    // clear existing fox photo and/or message
-                    document.querySelector(".photo").innerHTML = "";
-
-                    // if the answer was incorrect, display a failure message
-                    var failureMessage = document.createElement("div");
-                    failureMessage.className = "feedback failure";
-                    failureMessage.innerHTML = "Sorry, the correct answer was " + questionsList[currentQuestion].correct + ".";
-
-                    // add failure message to page
-                    document.querySelector(".photo").appendChild(failureMessage);
-                };
-                console.log(foxQueryUrl);
-            });
-        }; 
-    });
-
+        // add failure message to page
+        document.querySelector(".photo").appendChild(failureMessage);
+    };
+            
     // load next question
     nextQuestion();
 };
