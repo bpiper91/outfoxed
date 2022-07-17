@@ -220,6 +220,7 @@ var checkAnswer = function (event) {
     if (event.target.dataset.correct === "correct") {
         // if the answer was correct, get fox photo
         var foxPhotoUrl = foxPicQuery();
+
         // clear existing fox photo and/or message
         document.querySelector(".photo").innerHTML = "";
 
@@ -449,21 +450,8 @@ var endGame = function () {
     });
 };
 
-// load a random fox photo on the initial page load
-var initialFox = function() {
-    var initialFoxUrl = foxPicQuery();
-    console.log(initialFoxUrl);
-    setTimeout(function() {
-        var initialFoxImg = document.createElement("img");
-        initialFoxImg.className = "home-fox";
-        initialFoxImg.setAttribute("src", initialFoxUrl);
-        initialFoxImg.setAttribute("alt", "photo of a fox");
-        // add photo to page
-        document.querySelector(".home-photo").appendChild(initialFoxImg);
-    }, 5000);
-};
-
-initialFox();
+// adding this fixes the bug of the first correct answer loading an undefined URL
+foxPicQuery();
 
 // add listener for start button to start game
 $(".start").on("click", function (event) {
