@@ -15,6 +15,15 @@ var earnedFoxes = [];
 var pictureUrl = "https://randomfox.ca/floof/";
 var pictureNum = [];
 
+// Element to use for modal popups.  Append data to this for modal popups
+let modalData = document.createElement('div')
+
+// Modal itself, add 'is-active' to class list to open modal
+let modal = document.getElementById('modal')
+
+// Modal-content, append modalData to this
+let modalContent = document.getElementById('modal-content')
+
 // get new questions from Open Trivia Database based on selected difficulty
 var getQuestions = function (difficulty) {
     // get difficulty selection
@@ -62,13 +71,17 @@ var getQuestions = function (difficulty) {
             } else {
                 // need to add error message
                 console.log("The page encountered an error retrieving questions.");
-                // IMPORTANT: add a modal to alert the user of the error
+                modalData.textContent = "The page encountered an error retrieving questions. Please refresh the page and try again."
+                modalContent.append(modalData)
+                modal.classList.add('is-active')
             };
         })
         .catch(function (error) {
             // need to add error message
             console.log("Please check your connection and try again.");
-            // IMPORTANT: add a modal to alert the user of the error
+            modalData.textContent = "Please check your connection and try again."
+            modalContent.append(modalData)
+            modal.classList.add('is-active')
         })
 };
 
@@ -472,3 +485,52 @@ $(".start").on("click", function (event) {
     var difficulty = $("#difficulty").val();
     getQuestions(difficulty);
 });
+
+// This is all of the example code from bulma for the modal.  Might can clean it up or adjust it as needed.
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Functions to open and close a modal
+    function openModal($el) {
+      $el.classList.add('is-active');
+    }
+  
+    function closeModal($el) {
+      $el.classList.remove('is-active');
+      // clears any previously added modal content
+      modalData.textContent = ""
+    }
+  
+    function closeAllModals() {
+      (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+        closeModal($modal);
+      });
+    }
+  
+    // Add a click event on buttons to open a specific modal
+    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+      const modal = $trigger.dataset.target;
+      const $target = document.getElementById(modal);
+  
+      $trigger.addEventListener('click', () => {
+        openModal($target);
+      });
+    });
+  
+    // Add a click event on various child elements to close the parent modal
+    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+      const $target = $close.closest('.modal');
+  
+      $close.addEventListener('click', () => {
+        closeModal($target);
+      });
+    });
+  
+    // Add a keyboard event to close all modals
+    document.addEventListener('keydown', (event) => {
+      const e = event || window.event;
+  
+      if (e.keyCode === 27) { // Escape key
+        closeAllModals();
+      }
+    });
+  });

@@ -33,16 +33,27 @@
         </p>
       </section>
       <!--game buttons-->
-      <label for="difficulty">Choose your difficulty:</label>
+      <label for="difficulty" class="tag is-large">Choose your difficulty:</label>
+      <div class="select is-multiple">
       <select id="difficulty" name="difficulty">
         <option value="easy">Easy</option>
         <option value="medium">Medium</option>
         <option value="hard">Hard</option>
         <option value="random">Random</option>
       </select>
-      <button type="btn" class="start">Start Game</button>
+    </div>
+      <button type="btn" class="start button is-success">Start Game</button>
     </div>
   </main>
+  <!-- Modal.  This is just a skeleton so the content will be dynamically updated in JS -->
+  <!-- To activate, add 'is-active' to the top div class list -->
+  <div class="modal" id="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content" id="modal-content">
+      <!-- Any other Bulma elements you want -->
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
   <!--JS links-->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
