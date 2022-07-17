@@ -12,9 +12,8 @@ var currentQuestion = 0;
 
 // fox photos
 var earnedFoxes = [];
-
-// fox photo numberical array (stores numbers between 1-115 for fox photo url implementation)
-const imageNumber = [];
+var pictureUrl = "https://randomfox.ca/floof/";
+var pictureNum = [];
 
 // get new questions from Open Trivia Database based on selected difficulty
 var getQuestions = function (difficulty) {
@@ -87,13 +86,17 @@ var startGame = function () {
     // IMPORTANT: add this code block later
 
     // load first question
+    // create container div
+    var questionContainerDiv = document.createElement("div");
+    questionContainerDiv.className = "question-container column is-full"
+
     // create question div and add question text
-    var questionTextDiv = document.createElement("div")
+    var questionTextDiv = document.createElement("div");
     questionTextDiv.className = "question";
     var questionNum = parseInt(questionsList[currentQuestion].number) + 1;
     questionTextDiv.innerHTML = questionNum + ". " + questionsList[currentQuestion].question;
     // append question div to main element
-    document.querySelector("main").appendChild(questionTextDiv);
+    questionContainerDiv.appendChild(questionTextDiv);
 
     // get and store the number of answer choices for the question
     var numChoices = questionsList[currentQuestion].incorrect.length + 1;
@@ -181,38 +184,50 @@ var startGame = function () {
         };
     };
 
-    // add answer choices div to main
-    document.querySelector("main").appendChild(answerChoicesDiv);
+
+    // append answer choices div to container div
+    questionContainerDiv.appendChild(answerChoicesDiv);
 
     // create and add photo div for feedback when a question is answered
     var photoDiv = document.createElement("div");
     photoDiv.className = "photo";
     photoDiv.innerHTML = "";
-    document.querySelector("main").appendChild(photoDiv);
+    questionContainerDiv.appendChild(photoDiv);
+
+    // add container div to main
+    document.querySelector("main").appendChild(questionContainerDiv);
 
     // add listener for answer choices
     $(".answer-choices").on("click", checkAnswer);
 }; 
 
+// get random fox photo from RandomFox
+var foxPicQuery = function () {
+    // api request
+    fetch(pictureUrl) 
+        .then((response) => {
+            if (response.ok) {
+                response.json().then(function (data) {
+                    // add image to array
+                    pictureNum.push(data.image);    
+                });
+            };
+        })
+        .catch(function (response) {
+            if(!response.ok) {
+                console.log("Fox Picture Query isn't working properly")
+            }
+        });
+        
+    return pictureNum[pictureNum.length - 1];
+};
+
 // check for right/wrong answer, display feedback, and store fox photo
 var checkAnswer = function (event) {
 
-    // loops through the imageNumber array 
-    for (var i=0, t=115; i<t; i++) {
-    imageNumber.push(Math.round(Math.random() * t))
-    };
-    
-    // pulls a single number from imageNumber array
-    const singleImageNumber = imageNumber[Math.floor(Math.random() * imageNumber.length)];
-    console.log(singleImageNumber);
-
     if (event.target.dataset.correct === "correct") {
-        // if the answer was correct, get fox photo and display to page with success message
-        // var foxPhotoUrl = getFoxPhoto();
-        var foxPhotoUrl = "https://randomfox.ca/images/" + singleImageNumber + ".jpg"
-        // IMPORTANT: set foxPhotoUrl to getFoxPhoto() after testing
-
-
+        // if the answer was correct, get fox photo
+        var foxPhotoUrl = foxPicQuery();
 
         // clear existing fox photo and/or message
         document.querySelector(".photo").innerHTML = "";
@@ -250,11 +265,11 @@ var checkAnswer = function (event) {
         // add failure message to page
         document.querySelector(".photo").appendChild(failureMessage);
     };
-
+            
     // load next question
     nextQuestion();
 };
-console.log(checkAnswer)
+
 // load each subsequent question after first one
 var nextQuestion = function () {
     currentQuestion = currentQuestion + 1
@@ -356,8 +371,12 @@ var nextQuestion = function () {
 };
 
 var endGame = function () {
-    // clear main
+    // clear container div
     $("main").html("");
+
+    // create endgame div
+    var endgameContainerDiv = document.createElement("div");
+    endgameContainerDiv.className = "endgame-container column is-full"
 
     // create text div
     var endgameTextDiv = document.createElement("div");
@@ -370,8 +389,8 @@ var endGame = function () {
         // add failure text
         endgameTextDiv.innerHTML = "<p>Sorry, you didn't earn any foxes this time.</p>";
     };
-    // append endgame text div to main
-    document.querySelector("main").appendChild(endgameTextDiv);
+    // append endgame text div to endgame container
+    endgameContainerDiv.appendChild(endgameTextDiv);
 
     // display difficulty selector and start button to start new 
     // create div to contain select and button
@@ -403,20 +422,20 @@ var endGame = function () {
     // add button to new game div
     newGameDiv.appendChild(newGameButton);
 
-    // add new game div to main
-    document.querySelector("main").appendChild(newGameDiv);
+    // add new game div to endgame container
+    endgameContainerDiv.appendChild(newGameDiv);
 
     if (earnedFoxes.length > 0) {
         // if fox photos were earned, display each one in a div
         // create container div
         var foxPhotosDiv = document.createElement("div");
-        foxPhotosDiv.className = "endgame-fox-photos";
+        foxPhotosDiv.className = "endgame-fox-photos columns is-multiline";
 
         // put each photo in a div and add it
         for (i = 0; i < earnedFoxes.length; i++) {
             // create div to hold photo
             var singlePhotoDiv = document.createElement("div");
-            singlePhotoDiv.className = "endgame-photo";
+            singlePhotoDiv.className = "endgame-photo column is-one-quarter";
 
             var foxPhotoImg = document.createElement("img");
             foxPhotoImg.className = "endgame-img";
@@ -429,8 +448,10 @@ var endGame = function () {
             foxPhotosDiv.appendChild(singlePhotoDiv);
         };
 
-        // add all fox photos to page
-        document.querySelector("main").appendChild(foxPhotosDiv);
+        // add all fox photos to container div
+        endgameContainerDiv.appendChild(foxPhotosDiv);
+        // add container div to page
+        document.querySelector("main").appendChild(endgameContainerDiv);
     };
 
     // check localstorage for stored fox photos and give option to display those
@@ -441,16 +462,13 @@ var endGame = function () {
         var difficulty = $("#new-difficulty").val();
         getQuestions(difficulty);
     });
-}
+};
+
+// adding this fixes the bug of the first correct answer loading an undefined URL
+foxPicQuery();
 
 // add listener for start button to start game
 $(".start").on("click", function (event) {
     var difficulty = $("#difficulty").val();
     getQuestions(difficulty);
 });
-
-
-
-
-
-
