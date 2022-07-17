@@ -1,9 +1,12 @@
-# OutFox
+# OutFoxed
 
-OutFox is a game to test anyon's knowledge of animals.
-The game object is to collect fox photos as reward while players build their knowledge of multiple animals.
+OutFoxed is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox. Grow your collection of photos by answering as many questions as you can!
 
-## General info
+## User Story
+
+AS AN animal lover
+I WANT to test my knowledge of animals and collect fox photos
+SO THAT I can learn more about animals and enjoy seeing foxes
 
 WHEN the user clicks the start button to start the game.
 THEN the page displays a question
@@ -20,19 +23,20 @@ THEN the page displays all of the foxes that were earned in that quiz and prompt
 WHEN the user clicks “see my foxes” (or some other button text)
 THEN the page displays all of the foxes earned across every game played
 
-    	WHEN the user clicks clear my foxes
-    	THEN all foxes are deleted from localstorage, and the user is prompted to start the game
+WHEN the user clicks clear my foxes
+THEN all foxes are deleted from localstorage, and the user is prompted to start the game
 
 ## Technologies
 
-This project is created with:
-*CSS
-*HTML5
-\*JavaScript
+Languages:
+- CSS
+- HTML5
+- JavaScript
+- JQuery
 
-\*APIs Used
-Open Trivia Database
-RandomFox
+APIs:
+- Open Trivia Database
+- RandomFox
 
 ## Contributing
 
