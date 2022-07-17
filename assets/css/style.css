@@ -1,0 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  text-align: center;
+  font-family: sans-serif;
+  background-color: rgb(246, 126, 14);
+}
+#logo {
+  font-family: fantasy;
+  color: white;
+  font-size: 40px;
+}
+#logo {
+  padding: 20px 35px;
+  background-color: black;
+}
+
+main {
+  height: 100vh;
+  background-image: url(../pictures/main-fox.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: auto;
+}
+#instructions {
+  border: 6px solid black;
+  color: #121111;
+  font-size: 20px;
+  width: 100%;
+  position: relative;
+  height: auto;
+}
+
+#instructions h2 {
+  font-size: 28px;
+}
+
+#difficulty-flex-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15%;
+}
+
+.difficulty-title {
+  font-size: 38px;
+}
+
+#start-flex-container {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  width: 50%;
+  margin-top: 20px;
+}
+
+.start-game {
+  align-self: center;
+}
+
+#difficulty,
+.start {
+  font-size: 18px !important;
+  border-radius: 10px;
+  border: none;
+  width: 20%;
+  margin: 10px;
+}
+
+.question,
+.choice {
+  color: black;
+}
+
+.question {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.choice {
+  font-size: 20px;
+}
+
+.endgame-photo {
+  max-height: 455px;
+  align-self: center;
+  overflow: hidden;
+}
+
+.endgame-img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: scale-down;
+}
