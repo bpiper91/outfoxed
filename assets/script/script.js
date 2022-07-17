@@ -12,9 +12,8 @@ var currentQuestion = 0;
 
 // fox photos
 var earnedFoxes = [];
-
-// fox photo numberical array (stores numbers between 1-115 for fox photo url implementation)
-const imageNumber = [];
+var pictureUrl = "https://randomfox.ca/floof/";
+var pictureNum = [];
 
 // get new questions from Open Trivia Database based on selected difficulty
 var getQuestions = function (difficulty) {
@@ -194,26 +193,33 @@ var startGame = function () {
     $(".answer-choices").on("click", checkAnswer);
 }; 
 
+// get random fox photo from RandomFox
+var foxPicQuery = function () {
+    // api request
+    fetch(pictureUrl) 
+        .then((response) => {
+            if (response.ok) {
+                response.json().then(function (data) {
+                    // add image to array
+                    pictureNum.push(data.image);    
+                });
+            };
+        })
+        .catch(function (response) {
+            if(!response.ok) {
+                console.log("Fox Picture Query isn't working properly")
+            }
+        });
+        
+    return pictureNum[pictureNum.length - 1];
+};
+
 // check for right/wrong answer, display feedback, and store fox photo
 var checkAnswer = function (event) {
 
-    // loops through the imageNumber array 
-    for (var i=0, t=115; i<t; i++) {
-    imageNumber.push(Math.round(Math.random() * t))
-    };
-    
-    // pulls a single number from imageNumber array
-    const singleImageNumber = imageNumber[Math.floor(Math.random() * imageNumber.length)];
-    console.log(singleImageNumber);
-
     if (event.target.dataset.correct === "correct") {
-        // if the answer was correct, get fox photo and display to page with success message
-        // var foxPhotoUrl = getFoxPhoto();
-        var foxPhotoUrl = "https://randomfox.ca/images/" + singleImageNumber + ".jpg"
-        // IMPORTANT: set foxPhotoUrl to getFoxPhoto() after testing
-
-
-
+        // if the answer was correct, get fox photo
+        var foxPhotoUrl = foxPicQuery();
         // clear existing fox photo and/or message
         document.querySelector(".photo").innerHTML = "";
 
@@ -250,11 +256,11 @@ var checkAnswer = function (event) {
         // add failure message to page
         document.querySelector(".photo").appendChild(failureMessage);
     };
-
+            
     // load next question
     nextQuestion();
 };
-console.log(checkAnswer)
+
 // load each subsequent question after first one
 var nextQuestion = function () {
     currentQuestion = currentQuestion + 1
@@ -441,16 +447,26 @@ var endGame = function () {
         var difficulty = $("#new-difficulty").val();
         getQuestions(difficulty);
     });
-}
+};
+
+// load a random fox photo on the initial page load
+var initialFox = function() {
+    var initialFoxUrl = foxPicQuery();
+    console.log(initialFoxUrl);
+    setTimeout(function() {
+        var initialFoxImg = document.createElement("img");
+        initialFoxImg.className = "home-fox";
+        initialFoxImg.setAttribute("src", initialFoxUrl);
+        initialFoxImg.setAttribute("alt", "photo of a fox");
+        // add photo to page
+        document.querySelector(".home-photo").appendChild(initialFoxImg);
+    }, 5000);
+};
+
+initialFox();
 
 // add listener for start button to start game
 $(".start").on("click", function (event) {
     var difficulty = $("#difficulty").val();
     getQuestions(difficulty);
 });
-
-
-
-
-
-
