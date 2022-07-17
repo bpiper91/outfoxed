@@ -417,13 +417,13 @@ var endGame = function () {
         // if fox photos were earned, display each one in a div
         // create container div
         var foxPhotosDiv = document.createElement("div");
-        foxPhotosDiv.className = "endgame-fox-photos";
+        foxPhotosDiv.className = "endgame-fox-photos columns";
 
         // put each photo in a div and add it
         for (i = 0; i < earnedFoxes.length; i++) {
             // create div to hold photo
             var singlePhotoDiv = document.createElement("div");
-            singlePhotoDiv.className = "endgame-photo";
+            singlePhotoDiv.className = "endgame-photo column is-one-quarter";
 
             var foxPhotoImg = document.createElement("img");
             foxPhotoImg.className = "endgame-img";
