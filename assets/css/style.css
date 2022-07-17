@@ -43,9 +43,11 @@ body {
 .endgame-photo {
   max-height: 455px;
   align-self: center;
+  overflow: hidden;
 }
 
 .endgame-img {
   max-height: 100%;
   max-width: 100%;
+  object-fit: scale-down;
 }

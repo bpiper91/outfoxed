@@ -86,13 +86,17 @@ var startGame = function () {
     // IMPORTANT: add this code block later
 
     // load first question
+    // create container div
+    var questionContainerDiv = document.createElement("div");
+    questionContainerDiv.className = "question-container column is-full"
+
     // create question div and add question text
-    var questionTextDiv = document.createElement("div")
+    var questionTextDiv = document.createElement("div");
     questionTextDiv.className = "question";
     var questionNum = parseInt(questionsList[currentQuestion].number) + 1;
     questionTextDiv.innerHTML = questionNum + ". " + questionsList[currentQuestion].question;
     // append question div to main element
-    document.querySelector("main").appendChild(questionTextDiv);
+    questionContainerDiv.appendChild(questionTextDiv);
 
     // get and store the number of answer choices for the question
     var numChoices = questionsList[currentQuestion].incorrect.length + 1;
@@ -180,14 +184,18 @@ var startGame = function () {
         };
     };
 
-    // add answer choices div to main
-    document.querySelector("main").appendChild(answerChoicesDiv);
+
+    // append answer choices div to container div
+    questionContainerDiv.appendChild(answerChoicesDiv);
 
     // create and add photo div for feedback when a question is answered
     var photoDiv = document.createElement("div");
     photoDiv.className = "photo";
     photoDiv.innerHTML = "";
-    document.querySelector("main").appendChild(photoDiv);
+    questionContainerDiv.appendChild(photoDiv);
+
+    // add container div to main
+    document.querySelector("main").appendChild(questionContainerDiv);
 
     // add listener for answer choices
     $(".answer-choices").on("click", checkAnswer);
@@ -363,8 +371,12 @@ var nextQuestion = function () {
 };
 
 var endGame = function () {
-    // clear main
+    // clear container div
     $("main").html("");
+
+    // create endgame div
+    var endgameContainerDiv = document.createElement("div");
+    endgameContainerDiv.className = "endgame-container column is-full"
 
     // create text div
     var endgameTextDiv = document.createElement("div");
@@ -377,8 +389,8 @@ var endGame = function () {
         // add failure text
         endgameTextDiv.innerHTML = "<p>Sorry, you didn't earn any foxes this time.</p>";
     };
-    // append endgame text div to main
-    document.querySelector("main").appendChild(endgameTextDiv);
+    // append endgame text div to endgame container
+    endgameContainerDiv.appendChild(endgameTextDiv);
 
     // display difficulty selector and start button to start new 
     // create div to contain select and button
@@ -410,14 +422,14 @@ var endGame = function () {
     // add button to new game div
     newGameDiv.appendChild(newGameButton);
 
-    // add new game div to main
-    document.querySelector("main").appendChild(newGameDiv);
+    // add new game div to endgame container
+    endgameContainerDiv.appendChild(newGameDiv);
 
     if (earnedFoxes.length > 0) {
         // if fox photos were earned, display each one in a div
         // create container div
         var foxPhotosDiv = document.createElement("div");
-        foxPhotosDiv.className = "endgame-fox-photos columns";
+        foxPhotosDiv.className = "endgame-fox-photos columns is-multiline";
 
         // put each photo in a div and add it
         for (i = 0; i < earnedFoxes.length; i++) {
@@ -436,8 +448,10 @@ var endGame = function () {
             foxPhotosDiv.appendChild(singlePhotoDiv);
         };
 
-        // add all fox photos to page
-        document.querySelector("main").appendChild(foxPhotosDiv);
+        // add all fox photos to container div
+        endgameContainerDiv.appendChild(foxPhotosDiv);
+        // add container div to page
+        document.querySelector("main").appendChild(endgameContainerDiv);
     };
 
     // check localstorage for stored fox photos and give option to display those
