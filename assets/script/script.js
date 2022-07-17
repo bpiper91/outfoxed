@@ -152,7 +152,7 @@ var startGame = function () {
     if (questionsList[currentQuestion].correct === "True" || questionsList[currentQuestion].correct === "False") {
         // if it's a true/false question, add True answer choice
         var singleChoiceDiv = document.createElement("div");
-        singleChoiceDiv.className = "choice";
+        singleChoiceDiv.className = "choice button";
         singleChoiceDiv.innerText = "True";
         // check correct answer and add appropriate data attribute
         if (questionsList[currentQuestion].correct === "True") {
@@ -165,7 +165,7 @@ var startGame = function () {
 
         // add False answer choice
         var singleChoiceDiv = document.createElement("div");
-        singleChoiceDiv.className = "choice";
+        singleChoiceDiv.className = "choice button";
         singleChoiceDiv.innerText = "False";
         // check correct answer and add appropriate data attribute
         if (questionsList[currentQuestion].correct === "False") {
@@ -181,7 +181,7 @@ var startGame = function () {
         // if it's a multiple choice question, add answer choices one by one
         for (i = 0; i < numChoices; i++) {
             var singleChoiceDiv = document.createElement("div");
-            singleChoiceDiv.className = "choice";
+            singleChoiceDiv.className = "choice button";
 
             // for each answer choice, add a data attribute based on whether it's the correct answer
             if (choiceOrder[i] === "correct") {
@@ -336,7 +336,7 @@ var nextQuestion = function () {
         if (questionsList[currentQuestion].correct === "True" || questionsList[currentQuestion].correct === "False") {
             // if it's a true/false question, add True answer choice
             var singleChoiceDiv = document.createElement("div");
-            singleChoiceDiv.className = "choice";
+            singleChoiceDiv.className = "choice button";
             singleChoiceDiv.innerText = "True";
             // check correct answer and add appropriate data attribute
             if (questionsList[currentQuestion].correct === "True") {
@@ -349,7 +349,7 @@ var nextQuestion = function () {
 
             // add False answer choice
             var singleChoiceDiv = document.createElement("div");
-            singleChoiceDiv.className = "choice";
+            singleChoiceDiv.className = "choice button";
             singleChoiceDiv.innerText = "False";
             // check correct answer and add appropriate data attribute
             if (questionsList[currentQuestion].correct === "False") {
@@ -365,7 +365,7 @@ var nextQuestion = function () {
             // if it's a multiple choice question, add answer choices one by one
             for (i = 0; i < numChoices; i++) {
                 var singleChoiceDiv = document.createElement("div");
-                singleChoiceDiv.className = "choice";
+                singleChoiceDiv.className = "choice button";
 
                 // for each answer choice, add a data attribute based on whether it's the correct answer
                 if (choiceOrder[i] === "correct") {
@@ -413,24 +413,28 @@ var endGame = function () {
 
     // create label
     var difficultyLabel = document.createElement("label");
+    difficultyLabel.classList.add('tag', 'is-large')
     difficultyLabel.setAttribute("for", "new-difficulty");
     difficultyLabel.innerText = "Choose your difficulty:";
     // add label to new game div
     newGameDiv.appendChild(difficultyLabel);
 
     // create select
+    let selectContainerDiv = document.createElement('div')
+    selectContainerDiv.classList.add("select", "is-multiple")
     var selectDifficulty = document.createElement("select");
     selectDifficulty.setAttribute("id", "new-difficulty");
     selectDifficulty.setAttribute("name", "new-difficulty");
     selectDifficulty.innerHTML = "<option value='easy'>Easy</option><option value='medium'>Medium</option><option value='hard'>Hard</option><option value='random'>Random</option>"
     // add select to new game div
-    newGameDiv.appendChild(selectDifficulty);
+    selectContainerDiv.appendChild(selectDifficulty);
+    newGameDiv.appendChild(selectContainerDiv)
 
     // create button
     var newGameButton = document.createElement("button");
     newGameButton.setAttribute("type", "btn");
     newGameButton.setAttribute("id", "start-new");
-    newGameButton.setAttribute("class", "start");
+    newGameButton.setAttribute("class", "start button is-primary");
     newGameButton.innerText = "New Game";
     // add button to new game div
     newGameDiv.appendChild(newGameButton);
