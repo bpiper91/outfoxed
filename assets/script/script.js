@@ -1,91 +1,72 @@
 // Brett's Note: search for "IMPORTANT" to find unfinished/hard-coded sections that will need to be changed
 
 // Open Trivia Database API request variables
-var openTdbUrl = "https://opentdb.com/api.php?";
-var numQuestions = 6; // number of questions to request from Open Trivia Database
+const openTdbUrl = "https://opentdb.com/api.php?";
+const numQuestions = 6; // number of questions to request from Open Trivia Database
 // IMPORTANT: set numQuestions to 10 (or whatever) when finished testing
-var questCategory = 27 // 27 is the animals category
+const questCategory = 27 // 27 is the animals category
 
 // quiz questions
-var questionsList = [];
-var currentQuestion = 0;
+let questionsList = [];
+let currentQuestion = 0;
 
 // fox photos
-var earnedFoxes = [];
-var pictureUrl = "https://randomfox.ca/floof/";
-var pictureNum = [];
+let earnedFoxes = [];
+const pictureUrl = "https://randomfox.ca/floof/";
+let pictureNum = [];
 
-// Element to use for modal popups.  Append data to this for modal popups
+// Element to use for modal popups. Append data to this for modal popups
 let modalData = document.createElement('div')
-
-// Modal itself, add 'is-active' to class list to open modal
-let modal = document.getElementById('modal')
-
-// Modal-content, append modalData to this
-let modalContent = document.getElementById('modal-content')
+let modal = document.getElementById('modal') // add 'is-active' to class list to open modal
+let modalContent = document.getElementById('modal-content') // append modalData to this
 
 // get new questions from Open Trivia Database based on selected difficulty
-var getQuestions = function (difficulty) {
+const getQuestions = (difficulty) => {
+    let questDifficulty = ''
     // get difficulty selection
-    // if the selected difficulty is easy, medium, or hard, create a parameter for the query URL
-    if (difficulty !== "random") {
-        questDifficulty = "&difficulty=" + difficulty;
-    } else {
-        // if the selected difficulty was random, don't add anything to query URL
-        questDifficulty = "";
-    };
+    // if the selected difficulty is easy, medium, or hard, add a parameter for the query URL, or do nothing if it's random
+    difficulty !== 'random' ? questDifficulty = "&difficulty=" + difficulty : null
     // IMPORTANT: the code below in this function needs to be un-commented after testing is finished
     // API request to Open Trivia Database
     fetch(openTdbUrl + "amount=" + numQuestions + "&category=" + questCategory + questDifficulty)
         // difficulty can be set to random (default), easy, medium, or hard
-        .then(function (response) {
-            if (response.ok) {
+        .then((response) => {
+            if (!response.ok) {
+                modalData.textContent = `Error. Status: ${response.status}`
+                modalContent.append(modalData)
+                modal.classList.add('is-active')
+                throw new Error(`Error. Status: ${response.status}`)
+            }
+            return response.json()
                 // if response is good, get the data
-                response.json().then(function (data) {
+                .then((data) => {
                     // clear old questions
-                    questionsList.length = 0;
+                    questionsList.length = 0
                     // store new questions
                     for (i = 0; i < numQuestions; i++) {
                         // get data for each question and add it to questions list
-
                         // copy each question's incorrect answers to an array
-                        var tempArray = [];
+                        let tempArray = [];
                         for (j = 0; j < data.results[i].incorrect_answers.length; j++) {
                             tempArray.push(data.results[i].incorrect_answers[j])
                         };
 
                         // make a new object with each question's info
-                        var newQuestion = {
+                        let newQuestion = {
                             'number': i.toString(),
                             'question': data.results[i].question,
                             'correct': data.results[i].correct_answer,
                             'incorrect': tempArray
-                        };
+                        }
                         // add the question info to the question list
                         questionsList.push(newQuestion);
-                    };
-
-                    // wait for API call to get questions before starting game
-                    setTimeout(startGame(), 1000);
-                });
-            } else {
-                // need to add error message
-                console.log("The page encountered an error retrieving questions.");
-                modalData.textContent = "The page encountered an error retrieving questions. Please refresh the page and try again."
-                modalContent.append(modalData)
-                modal.classList.add('is-active')
-            };
+                    }
+                    return startGame()
+                })
         })
-        .catch(function (error) {
-            // need to add error message
-            console.log("Please check your connection and try again.");
-            modalData.textContent = "Please check your connection and try again."
-            modalContent.append(modalData)
-            modal.classList.add('is-active')
-        })
-};
+}
 
-var startGame = function () {
+const startGame = () => {
     // reset current question number
     currentQuestion = 0;
 
@@ -100,19 +81,19 @@ var startGame = function () {
 
     // load first question
     // create container div
-    var questionContainerDiv = document.createElement("div");
+    let questionContainerDiv = document.createElement("div");
     questionContainerDiv.className = "question-container column is-full"
 
     // create question div and add question text
-    var questionTextDiv = document.createElement("div");
-    questionTextDiv.className = "question";
-    var questionNum = parseInt(questionsList[currentQuestion].number) + 1;
+    let questionTextDiv = document.createElement("div");
+    questionTextDiv.className = "question tag is-light is-large mb-3";
+    let questionNum = parseInt(questionsList[currentQuestion].number) + 1;
     questionTextDiv.innerHTML = questionNum + ". " + questionsList[currentQuestion].question;
     // append question div to main element
     questionContainerDiv.appendChild(questionTextDiv);
 
     // get and store the number of answer choices for the question
-    var numChoices = questionsList[currentQuestion].incorrect.length + 1;
+    let numChoices = questionsList[currentQuestion].incorrect.length + 1;
 
     if (questionsList[currentQuestion].correct !== "True" && questionsList[currentQuestion].correct !== "False") {
         // randomize answer choices
@@ -197,7 +178,6 @@ var startGame = function () {
         };
     };
 
-
     // append answer choices div to container div
     questionContainerDiv.appendChild(answerChoicesDiv);
 
@@ -212,31 +192,31 @@ var startGame = function () {
 
     // add listener for answer choices
     $(".answer-choices").on("click", checkAnswer);
-}; 
+};
 
 // get random fox photo from RandomFox
-var foxPicQuery = function () {
+const foxPicQuery = () => {
     // api request
-    fetch(pictureUrl) 
+    fetch(pictureUrl)
         .then((response) => {
-            if (response.ok) {
+            if (!response.ok) {
+                modalData.textContent = `Error. Status: ${response.status}`
+                modalContent.append(modalData)
+                modal.classList.add('is-active')
+                throw new Error(`Error. Status: ${response.status}`)
+            }
+            {
                 response.json().then(function (data) {
                     // add image to array
-                    pictureNum.push(data.image);    
+                    pictureNum.push(data.image);
                 });
             };
         })
-        .catch(function (response) {
-            if(!response.ok) {
-                console.log("Fox Picture Query isn't working properly")
-            }
-        });
-        
     return pictureNum[pictureNum.length - 1];
 };
 
 // check for right/wrong answer, display feedback, and store fox photo
-var checkAnswer = function (event) {
+const checkAnswer = (event) => {
 
     if (event.target.dataset.correct === "correct") {
         // if the answer was correct, get fox photo
@@ -247,8 +227,8 @@ var checkAnswer = function (event) {
 
         // create success message
         var successMessage = document.createElement("div");
-        successMessage.className = "feedback success";
-        successMessage.innerText = "That's right! You earned a fox!";
+        successMessage.className = "feedback success notification is-large is-success m-3";
+        successMessage.textContent = "That's right! You earned a fox!";
         // add to page
         document.querySelector(".photo").appendChild(successMessage);
 
@@ -277,19 +257,19 @@ var checkAnswer = function (event) {
 
         // if the answer was incorrect, display a failure message
         var failureMessage = document.createElement("div");
-        failureMessage.className = "feedback failure";
+        failureMessage.className = "feedback failure notification is-large is-danger m-3";
         failureMessage.innerHTML = "Sorry, the correct answer was " + questionsList[currentQuestion].correct + ".";
 
         // add failure message to page
         document.querySelector(".photo").appendChild(failureMessage);
     };
-            
+
     // load next question
     nextQuestion();
 };
 
 // load each subsequent question after first one
-var nextQuestion = function () {
+const nextQuestion = () => {
     currentQuestion = currentQuestion + 1
 
     // if there are no more questions, end the game after 3.5 seconds
@@ -496,52 +476,3 @@ $(".start").on("click", function (event) {
     var difficulty = $("#difficulty").val();
     getQuestions(difficulty);
 });
-
-// This is all of the example code from bulma for the modal.  Might can clean it up or adjust it as needed.
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Functions to open and close a modal
-    function openModal($el) {
-      $el.classList.add('is-active');
-    }
-  
-    function closeModal($el) {
-      $el.classList.remove('is-active');
-      // clears any previously added modal content
-      modalData.textContent = ""
-    }
-  
-    function closeAllModals() {
-      (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-        closeModal($modal);
-      });
-    }
-  
-    // Add a click event on buttons to open a specific modal
-    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-      const modal = $trigger.dataset.target;
-      const $target = document.getElementById(modal);
-  
-      $trigger.addEventListener('click', () => {
-        openModal($target);
-      });
-    });
-  
-    // Add a click event on various child elements to close the parent modal
-    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-      const $target = $close.closest('.modal');
-  
-      $close.addEventListener('click', () => {
-        closeModal($target);
-      });
-    });
-  
-    // Add a keyboard event to close all modals
-    document.addEventListener('keydown', (event) => {
-      const e = event || window.event;
-  
-      if (e.keyCode === 27) { // Escape key
-        closeAllModals();
-      }
-    });
-  });
