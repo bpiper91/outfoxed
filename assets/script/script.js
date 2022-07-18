@@ -438,7 +438,7 @@ var endGame = function () {
         for (i = 0; i < earnedFoxes.length; i++) {
             // create div to hold photo
             var singlePhotoDiv = document.createElement("div");
-            singlePhotoDiv.className = "endgame-photo column is-one-quarter mt-6";
+            singlePhotoDiv.className = "endgame-photo column is-one-quarter-desktop is-one-third-tablet mt-4";
 
             var foxPhotoImg = document.createElement("img");
             foxPhotoImg.className = "endgame-img";
