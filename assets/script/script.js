@@ -402,6 +402,36 @@ var endGame = function () {
         // add failure text
         endgameTextDiv.innerHTML = "<p>Sorry, you didn't earn any foxes this time.</p>";
     };
+
+    
+    
+    //check localstorage for existing array
+    if (localStorage.getItem("foxHut")) {
+        //if in localstorage, get it and add button to display
+                //get array
+                var foxHut = JSON.parse(localStorage.getItem("foxHut"));
+                console.log(foxHut);
+                //add current array to it
+                foxHut.concat(earnedFoxes);
+                //store new array in local storage
+                localStorage.setItem("foxHut",JSON.stringify(foxHut));
+                //add text and btn
+                //createparagraph element and add to page 
+                var paragraph = document.createElement("p");
+                paragraph.innerHTML = "If you want to view collected foxes, please select button below.";
+                endgameTextDiv.appendChild(paragraph);
+                //create and style button and add to page
+                var button = document.createElement("button");
+                button.id = "my-foxes";
+                button.className = "start button";
+                button.setAttribute("type", "btn");
+                button.innerHTML = "Show My Foxes!";
+                endgameTextDiv.appendChild(button);
+        } else {    
+        //if theres nothing in localstorage, add current array to localstorag
+        var foxHut = earnedFoxes
+        localStorage.setItem("foxHut",JSON.stringify(foxHut)); }
+
     // append endgame text div to endgame container
     endgameContainerDiv.appendChild(endgameTextDiv);
 
@@ -471,8 +501,6 @@ var endGame = function () {
         document.querySelector("main").appendChild(endgameContainerDiv);
     };
 
-    // check localstorage for stored fox photos and give option to display those
-    // IMPORTANT: add this content later
 
     // add listener for new game button
     $("#start-new").on("click", function (event) {
