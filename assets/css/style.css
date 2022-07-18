@@ -1,3 +1,4 @@
+/* Overall styling */
 * {
   margin: 0;
   padding: 0;
@@ -11,11 +12,15 @@ body {
   background-color: rgb(246, 126, 14);
   font-size: 1.25rem;
 }
+
+/* Header styling */
 #logo {
   font-family: fantasy;
   color: white;
 }
 
+/* Main area styling */
+/* Home screen styling */
 #main {
   overflow: auto;
 }
@@ -37,34 +42,11 @@ body {
   max-height: 500px;
 }
 
-.endgame-photo {
-  /* max-height: 450px; */
-  align-self: center;
-  overflow: hidden;
-}
-
-.endgame-img {
-  max-height: 425px;
-  max-width: 500px;
-  object-fit: scale-down;
-  margin: 0 auto;
-}
-
-.button {
-  margin-left: 5px;
-}
-
 .question,
 .feedback,
 .endgame-text,
 .new-game p {
   color: black;
-}
-
-.tag {
-  padding: 25px 15px;
-  color: #ffffff;
-  background-color: #4a4a4a;
 }
 
 .instructions-container {
@@ -87,6 +69,35 @@ select option {
   height: 2.5rem;
 }
 
+.message-header {
+  justify-content: center;
+}
+
+/* Endgame screen styling */
+.endgame-photo {
+  /* max-height: 450px; */
+  align-self: center;
+  overflow: hidden;
+}
+
+.endgame-img {
+  max-height: 425px;
+  max-width: 500px;
+  object-fit: scale-down;
+  margin: 0 auto;
+}
+
+/* Utility styling */
+.button {
+  margin-left: 5px;
+}
+
+.tag {
+  padding: 25px 15px;
+  color: #ffffff;
+  background-color: #4a4a4a;
+}
+
 .is-green {
   /* utility for buttons */
   background-color: #04AA6D;
@@ -99,8 +110,4 @@ select option {
   padding-top: 0;
   padding-bottom: 2px;
   height: 2.5rem;
-}
-
-.message-header {
-  justify-content: center;
 }
