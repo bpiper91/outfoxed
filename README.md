@@ -1,9 +1,19 @@
 # OutFoxed
 
-OutFoxed is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox. Grow your collection of photos by answering as many questions as you can!
+**OutFoxed** is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox. Grow your collection of photos by answering as many questions as you can!
+
+---
+
+[Link to live application](https://bpiper91.github.io/outfoxed/)
+
+---
+
+![Image of application](./assets/images/example-image.png)
+
+---
 
 ## User Story
-
+```
 AS AN animal lover
 I WANT to test my knowledge of animals and collect fox photos
 SO THAT I can learn more about animals and enjoy seeing foxes
@@ -25,6 +35,8 @@ THEN the page displays all of the foxes earned across every game played
 
 WHEN the user clicks clear my foxes
 THEN all foxes are deleted from localstorage, and the user is prompted to start the game
+```
+---
 
 ## Technologies
 
@@ -35,13 +47,15 @@ Languages:
 - JQuery
 
 APIs:
-- Open Trivia Database
-- RandomFox
+- [Open Trivia Database](https://opentdb.com)
+- [RandomFox](https://randomfox.ca)
+
+---
 
 ## Contributing
 
-Brett Piper
-Reggie Green
-Kyle Carter
-Aaron Key
-Jorge Aguilar
+- [Brett Piper](https://github.com/bpiper91)
+- [Reggie Green](https://github.com/Greenreggie10)
+- [Kyle Carter](https://github.com/KCarter134)
+- [Aaron Key](https://github.com/AaronMikelKey)
+- [Jorge Aguilar](https://github.com/JorgeAguilarNC)
