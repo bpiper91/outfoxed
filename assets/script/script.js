@@ -86,7 +86,7 @@ const startGame = () => {
 
     // create question div and add question text
     let questionTextDiv = document.createElement("div");
-    questionTextDiv.className = "question tag is-light is-large mb-3";
+    questionTextDiv.className = "question tag is-light is-large my-3";
     let questionNum = parseInt(questionsList[currentQuestion].number) + 1;
     questionTextDiv.innerHTML = questionNum + ". " + questionsList[currentQuestion].question;
     // append question div to main element
@@ -227,7 +227,7 @@ const checkAnswer = (event) => {
 
         // create success message
         var successMessage = document.createElement("div");
-        successMessage.className = "feedback success notification is-large is-success m-3";
+        successMessage.className = "feedback notification center is-large is-green my-3";
         successMessage.textContent = "That's right! You earned a fox!";
         // add to page
         document.querySelector(".photo").appendChild(successMessage);
@@ -257,7 +257,7 @@ const checkAnswer = (event) => {
 
         // if the answer was incorrect, display a failure message
         var failureMessage = document.createElement("div");
-        failureMessage.className = "feedback failure notification is-large is-danger m-3";
+        failureMessage.className = "feedback notification center is-large is-red my-3";
         failureMessage.innerHTML = "Sorry, the correct answer was " + questionsList[currentQuestion].correct + ".";
 
         // add failure message to page
