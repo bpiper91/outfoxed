@@ -146,13 +146,13 @@ var startGame = function () {
     // populate answer choices
     // create answer choices div
     var answerChoicesDiv = document.createElement("div");
-    answerChoicesDiv.className = "answer-choices";
+    answerChoicesDiv.className = "answer-choices py-4";
 
     // add answer choices to answer choices div
     if (questionsList[currentQuestion].correct === "True" || questionsList[currentQuestion].correct === "False") {
         // if it's a true/false question, add True answer choice
         var singleChoiceDiv = document.createElement("div");
-        singleChoiceDiv.className = "choice button";
+        singleChoiceDiv.className = "choice button mx-3";
         singleChoiceDiv.innerText = "True";
         // check correct answer and add appropriate data attribute
         if (questionsList[currentQuestion].correct === "True") {
@@ -165,7 +165,7 @@ var startGame = function () {
 
         // add False answer choice
         var singleChoiceDiv = document.createElement("div");
-        singleChoiceDiv.className = "choice button";
+        singleChoiceDiv.className = "choice button mx-3";
         singleChoiceDiv.innerText = "False";
         // check correct answer and add appropriate data attribute
         if (questionsList[currentQuestion].correct === "False") {
@@ -181,7 +181,7 @@ var startGame = function () {
         // if it's a multiple choice question, add answer choices one by one
         for (i = 0; i < numChoices; i++) {
             var singleChoiceDiv = document.createElement("div");
-            singleChoiceDiv.className = "choice button";
+            singleChoiceDiv.className = "choice button mx-3";
 
             // for each answer choice, add a data attribute based on whether it's the correct answer
             if (choiceOrder[i] === "correct") {
@@ -252,13 +252,18 @@ var checkAnswer = function (event) {
         // add to page
         document.querySelector(".photo").appendChild(successMessage);
 
+        // create div to hold photo
+        var foxPhotoDiv = document.createElement("div");
+        foxPhotoDiv.className = "endgame-photo";
         // create img element to display photo
         var foxPhotoImg = document.createElement("img");
-        foxPhotoImg.className = "fox-photo-img";
+        foxPhotoImg.className = "endgame-img";
         foxPhotoImg.src = foxPhotoUrl;
         foxPhotoImg.setAttribute("alt", "photo of a fox");
-        // add to page
-        document.querySelector(".photo").appendChild(foxPhotoImg);
+        // add to div
+        foxPhotoDiv.appendChild(foxPhotoImg);
+        // add div to page
+        document.querySelector(".photo").appendChild(foxPhotoDiv);
 
         // store fox in global array
         earnedFoxes.push(foxPhotoUrl);
@@ -336,7 +341,7 @@ var nextQuestion = function () {
         if (questionsList[currentQuestion].correct === "True" || questionsList[currentQuestion].correct === "False") {
             // if it's a true/false question, add True answer choice
             var singleChoiceDiv = document.createElement("div");
-            singleChoiceDiv.className = "choice button";
+            singleChoiceDiv.className = "choice button mx-3";
             singleChoiceDiv.innerText = "True";
             // check correct answer and add appropriate data attribute
             if (questionsList[currentQuestion].correct === "True") {
@@ -349,7 +354,7 @@ var nextQuestion = function () {
 
             // add False answer choice
             var singleChoiceDiv = document.createElement("div");
-            singleChoiceDiv.className = "choice button";
+            singleChoiceDiv.className = "choice button mx-3";
             singleChoiceDiv.innerText = "False";
             // check correct answer and add appropriate data attribute
             if (questionsList[currentQuestion].correct === "False") {
@@ -365,7 +370,7 @@ var nextQuestion = function () {
             // if it's a multiple choice question, add answer choices one by one
             for (i = 0; i < numChoices; i++) {
                 var singleChoiceDiv = document.createElement("div");
-                singleChoiceDiv.className = "choice button";
+                singleChoiceDiv.className = "choice button mx-3";
 
                 // for each answer choice, add a data attribute based on whether it's the correct answer
                 if (choiceOrder[i] === "correct") {
@@ -393,7 +398,7 @@ var endGame = function () {
 
     // create text div
     var endgameTextDiv = document.createElement("div");
-    endgameTextDiv.className = "endgame-text";
+    endgameTextDiv.className = "endgame-text pt-1";
 
     if (earnedFoxes.length > 0) {
         // add success text
@@ -408,23 +413,24 @@ var endGame = function () {
     // display difficulty selector and start button to start new 
     // create div to contain select and button
     var newGameDiv = document.createElement("div");
-    newGameDiv.className = "new-game";
+    newGameDiv.className = "new-game my-3";
     newGameDiv.innerHTML = "<p>Want to play again?</p>";
 
     // create label
     var difficultyLabel = document.createElement("label");
-    difficultyLabel.classList.add('tag', 'is-large')
+    difficultyLabel.classList.add('tag', 'is-large', 'mt-2');
     difficultyLabel.setAttribute("for", "new-difficulty");
     difficultyLabel.innerText = "Choose your difficulty:";
     // add label to new game div
     newGameDiv.appendChild(difficultyLabel);
 
     // create select
-    let selectContainerDiv = document.createElement('div')
-    selectContainerDiv.classList.add("select", "is-multiple")
+    let selectContainerDiv = document.createElement('div');
+    selectContainerDiv.classList.add("select", "is-multiple", "mt-2", "mx-2");
     var selectDifficulty = document.createElement("select");
     selectDifficulty.setAttribute("id", "new-difficulty");
     selectDifficulty.setAttribute("name", "new-difficulty");
+    selectDifficulty.setAttribute("class", "difficulty");
     selectDifficulty.innerHTML = "<option value='easy'>Easy</option><option value='medium'>Medium</option><option value='hard'>Hard</option><option value='random'>Random</option>"
     // add select to new game div
     selectContainerDiv.appendChild(selectDifficulty);
@@ -434,7 +440,7 @@ var endGame = function () {
     var newGameButton = document.createElement("button");
     newGameButton.setAttribute("type", "btn");
     newGameButton.setAttribute("id", "start-new");
-    newGameButton.setAttribute("class", "start button is-primary");
+    newGameButton.setAttribute("class", "start button is-green mx-5 mt-2");
     newGameButton.innerText = "New Game";
     // add button to new game div
     newGameDiv.appendChild(newGameButton);
@@ -452,7 +458,7 @@ var endGame = function () {
         for (i = 0; i < earnedFoxes.length; i++) {
             // create div to hold photo
             var singlePhotoDiv = document.createElement("div");
-            singlePhotoDiv.className = "endgame-photo column is-one-quarter";
+            singlePhotoDiv.className = "endgame-photo column is-one-quarter mt-6";
 
             var foxPhotoImg = document.createElement("img");
             foxPhotoImg.className = "endgame-img";
@@ -467,9 +473,10 @@ var endGame = function () {
 
         // add all fox photos to container div
         endgameContainerDiv.appendChild(foxPhotosDiv);
-        // add container div to page
-        document.querySelector("main").appendChild(endgameContainerDiv);
     };
+
+    // add container div to page
+    document.querySelector("main").appendChild(endgameContainerDiv);
 
     // check localstorage for stored fox photos and give option to display those
     // IMPORTANT: add this content later

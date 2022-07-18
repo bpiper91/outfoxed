@@ -18,35 +18,41 @@
       <p id="logo">OutFoxed</p>
     </div>
   </header>
-  <main class="columns p-4">
+  <main class="columns is-centered is-multiline px-4 pt-4">
     <!--DivBoxes for images/game-->
-    <div class="home-photo column is-one-third">
+    <div class="home-photo column is-one-quarter-desktop is-one-half-tablet">
       <!--image-->
       <img src="https://randomfox.ca/images/5.jpg" alt="photo of a fox" class="home-fox" />
     </div>
-    <div class="start-game column is-two-thirds">
-      <!--instructions-->
-      <section id="instructions" class="message">
-        <h2 class="message-header">Game Instructions</h2>
-        <p class="message-body">
-          OutFoxed is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox.
-          Grow your collection of photos by answering as many questions as you can!
-        <br>
-        <br>
-          Click on [button in header to be added later] to see all the fox photos you've earned.
-        </p>
-      </section>
-      <!--game buttons-->
-      <label for="difficulty" class="tag is-large">Choose your difficulty:</label>
-      <div class="select is-multiple">
-      <select id="difficulty" name="difficulty">
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-        <option value="random">Random</option>
-      </select>
-    </div>
-      <button type="btn" class="start button is-success">Start Game</button>
+    <div class="start-game column is-one-half">
+      <div class="instructions-container">
+        <!--instructions-->
+        <section id="instructions" class="message">
+          <div class="message-header has-text-centered">
+            <h2>Game Instructions</h2>
+          </div>
+          <p class="message-body">
+            OutFoxed is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox.
+            Grow your collection of photos by answering as many questions as you can!
+            <br>
+            <br>
+            Click on [button in header to be added later] to see all the fox photos you've earned.
+          </p>
+        </section>
+        <section id="game-buttons">
+          <!--game buttons-->
+          <label for="difficulty" class="tag is-large mt-4">Choose your difficulty:</label>
+          <div class="select is-multiple mt-4 mx-1">
+            <select id="difficulty" name="difficulty" class="difficulty">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+              <option value="random">Random</option>
+            </select>
+          </div>
+          <button type="btn" id="start" class="start button is-green mx-5 mt-4">Start Game</button>
+        </section>
+      </div>
     </div>
   </main>
   <!-- Modal.  This is just a skeleton so the content will be dynamically updated in JS -->
