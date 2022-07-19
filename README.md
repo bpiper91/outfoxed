@@ -1,6 +1,6 @@
 # OutFoxed
 
-**OutFoxed** is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox. Grow your collection of photos by answering as many questions as you can!
+**OutFoxed** is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox. Grow your collection of photos by answering as many questions as you can!  Your earned foxes will be saved to local storage.
 
 ---
 
