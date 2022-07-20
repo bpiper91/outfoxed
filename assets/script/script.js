@@ -491,6 +491,11 @@ var endGame = function () {
     });
 };
 
+// clear stored foxes
+// var clearStorage = function () {
+    
+// };
+
 // adding this fixes the bug of the first correct answer loading an undefined URL
 foxPicQuery();
 

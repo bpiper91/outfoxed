@@ -36,6 +36,19 @@ body {
   border-radius: 4px;
 }
 
+/* Footer styling */
+footer {
+  background: #090800;
+  width: 100%;
+  padding: 40px 35px;
+}
+footer h2 {
+  display: inline;
+  color: white;
+  font-size: 1rem;
+  margin: 0;
+}
+
 /* Main area styling */
 /* Home screen styling */
 #main {
@@ -140,21 +153,8 @@ select option {
 .notification {
   max-width: 1000px;
 }
-footer {
-  background: #090800;
-  width: 100%;
-  padding: 40px 35px;
-}
-footer h2 {
-  display: inline;
-  color: #fbfeff;
-  font-size: 30px;
+
+.full-height {
+  height: 100vh;
   margin: 0;
-}
-footer div {
-  float: right;
-  text-align: right;
-}
-footer a {
-  color: #f0f5f8;
 }
