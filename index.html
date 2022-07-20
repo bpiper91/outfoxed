@@ -1,75 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>OutFoxed</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"
+      integrity="sha512-HqxHUkJM0SYcbvxUw5P60SzdOTy/QVwA1JJrvaXJv4q7lmbDZCmZaqz01UPOaQveoxfYRv1tHozWGPMcuTBuvQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>OutFoxed</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"
-    integrity="sha512-HqxHUkJM0SYcbvxUw5P60SzdOTy/QVwA1JJrvaXJv4q7lmbDZCmZaqz01UPOaQveoxfYRv1tHozWGPMcuTBuvQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-</head>
-
-<body>
-  <header class="hero has-background-black">
-    <div class="hero-body">
-      <h1 id="logo">OutFoxed</h1>
-      <button class="header-btn button is-green" id="header-btn">My Foxes</button>
-    </div>
-  </header>
-  <main class="columns is-centered is-multiline px-4 pt-4">
-    <!--DivBoxes for images/game-->
-    <div class="home-photo column is-one-quarter-desktop is-one-half-tablet">
-      <!--image-->
-      <img src="https://randomfox.ca/images/5.jpg" alt="photo of a fox" class="home-fox" />
-    </div>
-    <div class="start-game column is-one-half">
-      <div class="instructions-container">
-        <!--instructions-->
-        <section id="instructions" class="message">
-          <div class="message-header has-text-centered">
-            <h2>Game Instructions</h2>
-          </div>
-          <p class="message-body">
-            OutFoxed is a game to test your knowledge of animals. Each correct answer will earn a random photo of a fox.
-            Grow your collection of photos by answering as many questions as you can!
-            <br>
-            <br>
-            Click the My Foxes button above to see all the fox photos you've earned, or start the game to add to your collection.
-          </p>
-        </section>
-        <section id="game-buttons">
-          <!--game buttons-->
-          <label for="difficulty" class="tag is-large mt-4">Choose your difficulty:</label>
-          <div class="select is-multiple mt-4 mx-1">
-            <select id="difficulty" name="difficulty" class="difficulty">
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-              <option value="random">Random</option>
-            </select>
-          </div>
-          <button type="btn" id="start" class="start button is-green mx-5 mt-4">Start Game</button>
-        </section>
+  <body>
+    <header class="hero has-background-black">
+      <div class="hero-body">
+        <h1 id="logo">OutFoxed</h1>
+        <button class="header-btn button is-green" id="header-btn">
+          My Foxes
+        </button>
       </div>
+    </header>
+    <main class="columns is-centered is-multiline px-4 pt-4">
+      <!--DivBoxes for images/game-->
+      <div class="home-photo column is-one-quarter-desktop is-one-half-tablet">
+        <!--image-->
+        <img
+          src="https://randomfox.ca/images/5.jpg"
+          alt="photo of a fox"
+          class="home-fox"
+        />
+      </div>
+      <div class="start-game column is-one-half">
+        <div class="instructions-container">
+          <!--instructions-->
+          <section id="instructions" class="message">
+            <div class="message-header has-text-centered">
+              <h2>Game Instructions</h2>
+            </div>
+            <p class="message-body">
+              OutFoxed is a game to test your knowledge of animals. Each correct
+              answer will earn a random photo of a fox. Grow your collection of
+              photos by answering as many questions as you can!
+              <br />
+              <br />
+              Click the My Foxes button above to see all the fox photos you've
+              earned, or start the game to add to your collection.
+            </p>
+          </section>
+          <section id="game-buttons">
+            <!--game buttons-->
+            <label for="difficulty" class="tag is-large mt-4"
+              >Choose your difficulty:</label
+            >
+            <div class="select is-multiple mt-4 mx-1">
+              <select id="difficulty" name="difficulty" class="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+                <option value="random">Random</option>
+              </select>
+            </div>
+            <button
+              type="btn"
+              id="start"
+              class="start button is-green mx-5 mt-4"
+            >
+              Start Game
+            </button>
+          </section>
+        </div>
+      </div>
+    </main>
+    <!-- Modal.  This is just a skeleton so the content will be dynamically updated in JS -->
+    <!-- To activate, add 'is-active' to the top div class list -->
+    <div class="modal" id="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content" id="modal-content">
+        <!-- Any other Bulma elements you want -->
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
     </div>
-  </main>
-  <!-- Modal.  This is just a skeleton so the content will be dynamically updated in JS -->
-  <!-- To activate, add 'is-active' to the top div class list -->
-  <div class="modal" id="modal">
-    <div class="modal-background"></div>
-    <div class="modal-content" id="modal-content">
-      <!-- Any other Bulma elements you want -->
-    </div>
-    <button class="modal-close is-large" aria-label="close"></button>
-  </div>
-  <!--JS links-->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="./assets/script/script.js"></script>
-  <script src="./assets/script/bulmaModal.js" ></script>
-</body>
-
+    <!--JS links-->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./assets/script/script.js"></script>
+    <script src="./assets/script/bulmaModal.js"></script>
+  </body>
+  <footer>
+    <h2>Made by an awesome team .</h2>
+    <!--adding privacy policy to the page in the footer bar NOTICE the br this is to create line break between left side-->
+    <div>&copy; 2019 Team9, Inc.</div>
+  </footer>
 </html>
