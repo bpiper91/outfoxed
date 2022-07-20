@@ -84,14 +84,7 @@ var showMyFoxes = function () {
         document.querySelector("main").appendChild(foxPic);
      }
                 
-    // if it exists then add it to page
-
-                
-    // if it doesn't exist then add text "you havent collected any foxes "
-       
-                
-     // display difficulty selector and start button to start new 
-     // create div to contain select and button
+   
     } else {                      
     var newGameDiv = document.createElement("div");
     newGameDiv.className = "new-game";
