@@ -18,7 +18,9 @@ let pictureNum = [];
 // Element to use for modal popups. Append data to this for modal popups
 let modalData = document.createElement('div')
 let modal = document.getElementById('modal') // add 'is-active' to class list to open modal
-let modalContent = document.getElementById('modal-content') // append modalData to this
+let modalContent = document.getElementById('modal-content') 
+var showFoxBtn = document.getElementById('header-btn')
+// append modalData to this
 
 // get new questions from Open Trivia Database based on selected difficulty
 const getQuestions = (difficulty) => {
@@ -66,7 +68,72 @@ const getQuestions = (difficulty) => {
         })
 }
 
-const startGame = () => {
+// Important!!! btn header when its click itll run function
+var showMyFoxes = function () {
+    // check localstorage "foxHut"
+    if (localStorage.getItem("foxHut")) {
+
+     var foxHut = JSON.parse(localStorage.getItem("foxHut"));
+//clear mainelement
+    document.querySelector("main").innerHTML="";
+    
+     for (let i = 0; i < foxHut.length; i++) {
+          var foxPicUrl = foxHut[i];
+        var foxPic = document.createElement("img");
+        foxPic.src = foxPicUrl;
+        document.querySelector("main").appendChild(foxPic);
+     }
+                
+    // if it exists then add it to page
+
+                
+    // if it doesn't exist then add text "you havent collected any foxes "
+       
+                
+     // display difficulty selector and start button to start new 
+     // create div to contain select and button
+    } else {                      
+    var newGameDiv = document.createElement("div");
+    newGameDiv.className = "new-game";
+    newGameDiv.innerHTML = "<p>Want to play again?</p>";
+
+    // create label
+    var difficultyLabel = document.createElement("label");
+    difficultyLabel.classList.add('tag', 'is-large')
+    difficultyLabel.setAttribute("for", "new-difficulty");
+    difficultyLabel.innerText = "Choose your difficulty:";
+    // add label to new game div
+    newGameDiv.appendChild(difficultyLabel);
+
+    // create select
+    let selectContainerDiv = document.createElement('div')
+    selectContainerDiv.classList.add("select", "is-multiple")
+    var selectDifficulty = document.createElement("select");
+    selectDifficulty.setAttribute("id", "new-difficulty");
+    selectDifficulty.setAttribute("name", "new-difficulty");
+    selectDifficulty.innerHTML = "<option value='easy'>Easy</option><option value='medium'>Medium</option><option value='hard'>Hard</option><option value='random'>Random</option>"
+    // add select to new game div
+    selectContainerDiv.appendChild(selectDifficulty);
+    newGameDiv.appendChild(selectContainerDiv)
+
+    // create button
+    var newGameButton = document.createElement("button");
+    newGameButton.setAttribute("type", "btn");
+    newGameButton.setAttribute("id", "start-new");
+    newGameButton.setAttribute("class", "start button is-primary");
+    newGameButton.innerText = "New Game";
+    // add button to new game div
+    newGameDiv.appendChild(newGameButton);
+
+    // add new game div to endgame container
+    document.querySelector("main").appendChild(newGameDiv);
+
+    }
+
+};
+
+
+var startGame = function () {
     // reset current question number
     currentQuestion = 0;
 
@@ -75,9 +142,8 @@ const startGame = () => {
 
     // clear main element
     $("main").html("");
-
-    // if New Game button exists, replace it with My Foxes button and add listener for My Foxes button
-    // IMPORTANT: add this code block later
+    
+    
 
     // load first question
     // create container div
@@ -91,10 +157,10 @@ const startGame = () => {
     questionTextDiv.innerHTML = questionNum + ". " + questionsList[currentQuestion].question;
     // append question div to main element
     questionContainerDiv.appendChild(questionTextDiv);
-
+    
     // get and store the number of answer choices for the question
     let numChoices = questionsList[currentQuestion].incorrect.length + 1;
-
+    
     if (questionsList[currentQuestion].correct !== "True" && questionsList[currentQuestion].correct !== "False") {
         // randomize answer choices
         // create array to hold each answer choice number
@@ -103,7 +169,7 @@ const startGame = () => {
         for (i = 0; i < numChoices; i++) {
             choiceNumbers.push(i);
         };
-
+        
         // create array to hold random order of choices
         var choiceOrder = [];
         var choicesLeft = numChoices;
@@ -123,12 +189,12 @@ const startGame = () => {
             };
         };
     };
-
+    
     // populate answer choices
     // create answer choices div
     var answerChoicesDiv = document.createElement("div");
     answerChoicesDiv.className = "answer-choices py-4";
-
+    
     // add answer choices to answer choices div
     if (questionsList[currentQuestion].correct === "True" || questionsList[currentQuestion].correct === "False") {
         // if it's a true/false question, add True answer choice
@@ -143,7 +209,7 @@ const startGame = () => {
         };
         // append the answer choice to the answer choices div
         answerChoicesDiv.appendChild(singleChoiceDiv);
-
+        
         // add False answer choice
         var singleChoiceDiv = document.createElement("div");
         singleChoiceDiv.className = "choice button mx-3";
@@ -154,16 +220,16 @@ const startGame = () => {
         } else {
             singleChoiceDiv.setAttribute("data-correct", "incorrect");
         };
-
+        
         // append the answer choice to the answer choices div
         answerChoicesDiv.appendChild(singleChoiceDiv);
-
+        
     } else {
         // if it's a multiple choice question, add answer choices one by one
         for (i = 0; i < numChoices; i++) {
             var singleChoiceDiv = document.createElement("div");
             singleChoiceDiv.className = "choice button mx-3";
-
+            
             // for each answer choice, add a data attribute based on whether it's the correct answer
             if (choiceOrder[i] === "correct") {
                 singleChoiceDiv.innerHTML = questionsList[currentQuestion].correct;
@@ -172,7 +238,7 @@ const startGame = () => {
                 singleChoiceDiv.innerHTML = questionsList[currentQuestion].incorrect[choiceOrder[i]];
                 singleChoiceDiv.setAttribute("data-correct", "incorrect");
             };
-
+            
             // append choice to answer choices div
             answerChoicesDiv.appendChild(singleChoiceDiv);
         };
@@ -180,16 +246,16 @@ const startGame = () => {
 
     // append answer choices div to container div
     questionContainerDiv.appendChild(answerChoicesDiv);
-
+    
     // create and add photo div for feedback when a question is answered
     var photoDiv = document.createElement("div");
     photoDiv.className = "photo";
     photoDiv.innerHTML = "";
     questionContainerDiv.appendChild(photoDiv);
-
+    
     // add container div to main
     document.querySelector("main").appendChild(questionContainerDiv);
-
+    
     // add listener for answer choices
     $(".answer-choices").on("click", checkAnswer);
 };
@@ -198,40 +264,42 @@ const startGame = () => {
 const foxPicQuery = () => {
     // api request
     fetch(pictureUrl)
-        .then((response) => {
-            if (!response.ok) {
-                modalData.textContent = `Error. Status: ${response.status}`
-                modalContent.append(modalData)
-                modal.classList.add('is-active')
-                throw new Error(`Error. Status: ${response.status}`)
-            }
-            {
-                response.json().then(function (data) {
-                    // add image to array
-                    pictureNum.push(data.image);
-                });
-            };
-        })
+    .then((response) => {
+        if (!response.ok) {
+            modalData.textContent = `Error. Status: ${response.status}`
+            modalContent.append(modalData)
+            modal.classList.add('is-active')
+            throw new Error(`Error. Status: ${response.status}`)
+        }
+        {
+            response.json().then(function (data) {
+                // add image to array
+                pictureNum.push(data.image);
+            });
+        };
+    })
     return pictureNum[pictureNum.length - 1];
 };
 
+//check
+
 // check for right/wrong answer, display feedback, and store fox photo
 const checkAnswer = (event) => {
-
+    
     if (event.target.dataset.correct === "correct") {
         // if the answer was correct, get fox photo
         var foxPhotoUrl = foxPicQuery();
-
+        
         // clear existing fox photo and/or message
         document.querySelector(".photo").innerHTML = "";
-
+        
         // create success message
         var successMessage = document.createElement("div");
         successMessage.className = "feedback notification center is-large is-green my-3";
         successMessage.textContent = "That's right! You earned a fox!";
         // add to page
         document.querySelector(".photo").appendChild(successMessage);
-
+        
         // create div to hold photo
         var foxPhotoDiv = document.createElement("div");
         foxPhotoDiv.className = "endgame-photo";
@@ -244,26 +312,26 @@ const checkAnswer = (event) => {
         foxPhotoDiv.appendChild(foxPhotoImg);
         // add div to page
         document.querySelector(".photo").appendChild(foxPhotoDiv);
-
+        
         // store fox in global array
         earnedFoxes.push(foxPhotoUrl);
-
+        
         // store fox in localStorage
         // IMPORTANT: add this feature later
-
+        
     } else {
         // clear existing fox photo and/or message
         document.querySelector(".photo").innerHTML = "";
-
+        
         // if the answer was incorrect, display a failure message
         var failureMessage = document.createElement("div");
         failureMessage.className = "feedback notification center is-large is-red my-3";
         failureMessage.innerHTML = "Sorry, the correct answer was " + questionsList[currentQuestion].correct + ".";
-
+        
         // add failure message to page
         document.querySelector(".photo").appendChild(failureMessage);
     };
-
+    
     // load next question
     nextQuestion();
 };
@@ -271,7 +339,7 @@ const checkAnswer = (event) => {
 // load each subsequent question after first one
 const nextQuestion = () => {
     currentQuestion = currentQuestion + 1
-
+    
     // if there are no more questions, end the game after 3.5 seconds
     if (!questionsList[currentQuestion]) {
         endGame();
@@ -280,14 +348,14 @@ const nextQuestion = () => {
         // update question text
         var questionNum = parseInt(questionsList[currentQuestion].number) + 1;
         document.querySelector(".question").innerHTML = questionNum + ". " + questionsList[currentQuestion].question;
-
+        
         // update answer choices
         // clear previous answer choices
         document.querySelector(".answer-choices").innerHTML = "";
-
+        
         // get and store the number of answer choices for the question
         var numChoices = questionsList[currentQuestion].incorrect.length + 1;
-
+        
         if (questionsList[currentQuestion].correct !== "True" && questionsList[currentQuestion].correct !== "False") {
             // randomize answer choices
             // create array to hold each answer choice number
@@ -296,7 +364,7 @@ const nextQuestion = () => {
             for (i = 0; i < numChoices; i++) {
                 choiceNumbers.push(i);
             };
-
+            
             // create array to hold random order of choices
             var choiceOrder = [];
             var choicesLeft = numChoices;
@@ -316,7 +384,7 @@ const nextQuestion = () => {
                 };
             };
         };
-
+        
         // add answer choices to answer choices div
         if (questionsList[currentQuestion].correct === "True" || questionsList[currentQuestion].correct === "False") {
             // if it's a true/false question, add True answer choice
@@ -331,7 +399,7 @@ const nextQuestion = () => {
             };
             // append the answer choice to the answer choices div
             document.querySelector(".answer-choices").appendChild(singleChoiceDiv);
-
+            
             // add False answer choice
             var singleChoiceDiv = document.createElement("div");
             singleChoiceDiv.className = "choice button mx-3";
@@ -342,16 +410,16 @@ const nextQuestion = () => {
             } else {
                 singleChoiceDiv.setAttribute("data-correct", "incorrect");
             };
-
+            
             // append the answer choice to the answer choices div
             document.querySelector(".answer-choices").appendChild(singleChoiceDiv);
-
+            
         } else {
             // if it's a multiple choice question, add answer choices one by one
             for (i = 0; i < numChoices; i++) {
                 var singleChoiceDiv = document.createElement("div");
                 singleChoiceDiv.className = "choice button mx-3";
-
+                
                 // for each answer choice, add a data attribute based on whether it's the correct answer
                 if (choiceOrder[i] === "correct") {
                     singleChoiceDiv.innerHTML = questionsList[currentQuestion].correct;
@@ -360,7 +428,7 @@ const nextQuestion = () => {
                     singleChoiceDiv.innerHTML = questionsList[currentQuestion].incorrect[choiceOrder[i]];
                     singleChoiceDiv.setAttribute("data-correct", "incorrect");
                 };
-
+                
                 // append choice to answer choices div
                 document.querySelector(".answer-choices").appendChild(singleChoiceDiv);
             };
@@ -371,15 +439,15 @@ const nextQuestion = () => {
 var endGame = function () {
     // clear container div
     $("main").html("");
-
+    
     // create endgame div
     var endgameContainerDiv = document.createElement("div");
     endgameContainerDiv.className = "endgame-container column is-full"
-
+    
     // create text div
     var endgameTextDiv = document.createElement("div");
     endgameTextDiv.className = "endgame-text pt-1";
-
+    
     if (earnedFoxes.length > 0) {
         // add success text
         endgameTextDiv.innerHTML = "<p>Well done! The foxes you earned are shown below.</p>";
@@ -391,47 +459,47 @@ var endGame = function () {
     //check localstorage for existing array
     if (localStorage.getItem("foxHut")) {
         //if in localstorage, get it and add button to display
-                //get array
-                var foxHut = JSON.parse(localStorage.getItem("foxHut"));
-                console.log(foxHut);
-                //add current array to it
-                foxHut.concat(earnedFoxes);
-                //store new array in local storage
-                localStorage.setItem("foxHut",JSON.stringify(foxHut));
-                //add text and btn
-                //createparagraph element and add to page 
-                var paragraph = document.createElement("p");
-                paragraph.innerHTML = "If you want to view collected foxes, please select button below.";
-                endgameTextDiv.appendChild(paragraph);
-                //create and style button and add to page
-                var button = document.createElement("button");
+        //get array
+        var foxHut = JSON.parse(localStorage.getItem("foxHut"));
+        console.log(foxHut);
+        //add current array to it
+        foxHut.concat(earnedFoxes);
+        //store new array in local storage
+        localStorage.setItem("foxHut",JSON.stringify(foxHut));
+        //add text and btn
+        //createparagraph element and add to page 
+        var paragraph = document.createElement("p");
+        paragraph.innerHTML = "If you want to view collected foxes, please select button below.";
+        endgameTextDiv.appendChild(paragraph);
+        //create and style button and add to page
+        var button = document.createElement("button");
                 button.id = "my-foxes";
                 button.className = "start button";
                 button.setAttribute("type", "btn");
                 button.innerHTML = "Show My Foxes";
                 endgameTextDiv.appendChild(button);
-        } else {    
-        //if theres nothing in localstorage, add current array to localstorag
-        var foxHut = earnedFoxes
-        localStorage.setItem("foxHut",JSON.stringify(foxHut)); }
-
-    // append endgame text div to endgame container
-    endgameContainerDiv.appendChild(endgameTextDiv);
-
-    // display difficulty selector and start button to start new 
-    // create div to contain select and button
-    var newGameDiv = document.createElement("div");
-    newGameDiv.className = "new-game my-3";
-    newGameDiv.innerHTML = "<p>Want to play again?</p>";
-
-    // create label
-    var difficultyLabel = document.createElement("label");
-    difficultyLabel.classList.add('tag', 'is-large', 'mt-2');
-    difficultyLabel.setAttribute("for", "new-difficulty");
+            } else {    
+                //if theres nothing in localstorage, add current array to localstorag
+                var foxHut = earnedFoxes
+                localStorage.setItem("foxHut",JSON.stringify(foxHut)); }
+                
+                // append endgame text div to endgame container
+                endgameContainerDiv.appendChild(endgameTextDiv);
+                
+                // display difficulty selector and start button to start new 
+                // create div to contain select and button
+                var newGameDiv = document.createElement("div");
+                newGameDiv.className = "new-game my-3";
+                newGameDiv.innerHTML = "<p>Want to play again?</p>";
+                
+                // create label
+                var difficultyLabel = document.createElement("label");
+                difficultyLabel.classList.add('tag', 'is-large', 'mt-2');
+                difficultyLabel.setAttribute("for", "new-difficulty");
     difficultyLabel.innerText = "Choose your difficulty:";
     // add label to new game div
     newGameDiv.appendChild(difficultyLabel);
-
+    
     // create select
     let selectContainerDiv = document.createElement('div');
     selectContainerDiv.classList.add("select", "is-multiple", "mt-2", "mx-2");
@@ -443,7 +511,7 @@ var endGame = function () {
     // add select to new game div
     selectContainerDiv.appendChild(selectDifficulty);
     newGameDiv.appendChild(selectContainerDiv)
-
+    
     // create button
     var newGameButton = document.createElement("button");
     newGameButton.setAttribute("type", "btn");
@@ -452,7 +520,7 @@ var endGame = function () {
     newGameButton.innerText = "New Game";
     // add button to new game div
     newGameDiv.appendChild(newGameButton);
-
+    
     // add new game div to endgame container
     endgameContainerDiv.appendChild(newGameDiv);
 
@@ -461,20 +529,20 @@ var endGame = function () {
         // create container div
         var foxPhotosDiv = document.createElement("div");
         foxPhotosDiv.className = "endgame-fox-photos columns is-multiline";
-
+        
         // put each photo in a div and add it
         for (i = 0; i < earnedFoxes.length; i++) {
             // create div to hold photo
             var singlePhotoDiv = document.createElement("div");
             singlePhotoDiv.className = "endgame-photo column is-one-quarter-desktop is-one-third-tablet mt-4";
-
+            
             var foxPhotoImg = document.createElement("img");
             foxPhotoImg.className = "endgame-img";
             foxPhotoImg.src = earnedFoxes[i];
             foxPhotoImg.setAttribute("alt", "photo of a fox");
             // add photo to div
             singlePhotoDiv.appendChild(foxPhotoImg);
-
+            
             // add single photo div to photos div
             foxPhotosDiv.appendChild(singlePhotoDiv);
         };
@@ -510,3 +578,10 @@ $(".start").on("click", function (event) {
     var difficulty = $("#difficulty").val();
     getQuestions(difficulty);
 });
+        
+ // if New Game button exists, replace it with My Foxes button and add listener for My Foxes button
+ // IMPORTANT: add this code block later
+
+ showFoxBtn.addEventListener('click', showMyFoxes); 
+
+    
