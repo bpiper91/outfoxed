@@ -85,6 +85,71 @@ var getQuestions = function (difficulty) {
         })
 };
 
+// Important!!! btn header when its click itll run function
+var showMyFoxes = function () {
+    // check localstorage "foxHut"
+    if (localStorage.getItem("foxHut")) {
+
+     var foxHut = JSON.parse(localStorage.getItem("foxHut"));
+//clear mainelement
+    document.querySelector("main").innerHTML="";
+    
+     for (let i = 0; i < foxHut.length; i++) {
+          foxHut[i];
+        var foxPicUrl =
+        foxPicUrl.innerHTML = document.createElement("div");
+        
+     }
+                
+    // if it exists then add it to page
+                
+    // if it doesn't exist then add text "you havent collected any foxes "
+                
+    //creat another btn endgameContainerDiv.appendChild(endgameTextDiv);
+                
+     // display difficulty selector and start button to start new 
+     // create div to contain select and button
+    } else { };                     
+    var newGameDiv = document.createElement("div");
+    newGameDiv.className = "new-game";
+    newGameDiv.innerHTML = "<p>Want to play again?</p>";
+
+    // create label
+    var difficultyLabel = document.createElement("label");
+    difficultyLabel.classList.add('tag', 'is-large')
+    difficultyLabel.setAttribute("for", "new-difficulty");
+    difficultyLabel.innerText = "Choose your difficulty:";
+    // add label to new game div
+    newGameDiv.appendChild(difficultyLabel);
+
+    // create select
+    let selectContainerDiv = document.createElement('div')
+    selectContainerDiv.classList.add("select", "is-multiple")
+    var selectDifficulty = document.createElement("select");
+    selectDifficulty.setAttribute("id", "new-difficulty");
+    selectDifficulty.setAttribute("name", "new-difficulty");
+    selectDifficulty.innerHTML = "<option value='easy'>Easy</option><option value='medium'>Medium</option><option value='hard'>Hard</option><option value='random'>Random</option>"
+    // add select to new game div
+    selectContainerDiv.appendChild(selectDifficulty);
+    newGameDiv.appendChild(selectContainerDiv)
+
+    // create button
+    var newGameButton = document.createElement("button");
+    newGameButton.setAttribute("type", "btn");
+    newGameButton.setAttribute("id", "start-new");
+    newGameButton.setAttribute("class", "start button is-primary");
+    newGameButton.innerText = "New Game";
+    // add button to new game div
+    newGameDiv.appendChild(newGameButton);
+
+    // add new game div to endgame container
+    endgameContainerDiv.appendChild(newGameDiv);
+
+
+
+};
+
+
 var startGame = function () {
     // reset current question number
     currentQuestion = 0;
@@ -234,6 +299,8 @@ var foxPicQuery = function () {
         
     return pictureNum[pictureNum.length - 1];
 };
+
+//check
 
 // check for right/wrong answer, display feedback, and store fox photo
 var checkAnswer = function (event) {
@@ -403,7 +470,6 @@ var endGame = function () {
         endgameTextDiv.innerHTML = "<p>Sorry, you didn't earn any foxes this time.</p>";
     };
 
-    
     
     //check localstorage for existing array
     if (localStorage.getItem("foxHut")) {
