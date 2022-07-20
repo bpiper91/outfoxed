@@ -492,9 +492,15 @@ var endGame = function () {
 };
 
 // clear stored foxes
-// var clearStorage = function () {
-    
-// };
+var clearStorage = function () {
+    if (localStorage.getItem("foxHut")) {
+        // if there's a stored array in localStorage, clear the array
+        let foxHut = JSON.parse(localStorage.getItem("foxHut"));
+        foxHut.length = 0;
+        // store cleared array in localStorage
+        localStorage.setItem("foxHut", JSON.stringify(foxHut));
+    };
+};
 
 // adding this fixes the bug of the first correct answer loading an undefined URL
 foxPicQuery();
