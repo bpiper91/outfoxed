@@ -1,9 +1,6 @@
-// Brett's Note: search for "IMPORTANT" to find unfinished/hard-coded sections that will need to be changed
-
 // Open Trivia Database API request variables
 const openTdbUrl = "https://opentdb.com/api.php?";
 const numQuestions = 6; // number of questions to request from Open Trivia Database
-// IMPORTANT: set numQuestions to 10 (or whatever) when finished testing
 const questCategory = 27 // 27 is the animals category
 
 // quiz questions
@@ -19,6 +16,7 @@ let pictureNum = [];
 let modalData = document.createElement('div')
 let modal = document.getElementById('modal') // add 'is-active' to class list to open modal
 let modalContent = document.getElementById('modal-content') // append modalData to this
+var showFoxBtn = document.getElementById('header-btn')
 
 // get new questions from Open Trivia Database based on selected difficulty
 const getQuestions = (difficulty) => {
@@ -66,7 +64,132 @@ const getQuestions = (difficulty) => {
         })
 }
 
-const startGame = () => {
+// btn header when its click itll run function
+var showMyFoxes = function () {
+    //clear mainelement
+    document.querySelector("main").innerHTML = "";
+
+    var container = document.createElement("div");
+    container.className = "column is-full";
+
+    var exists;
+
+    // check localstorage "foxHut"
+    if (localStorage.getItem("foxHut")) {
+        exists = true;
+
+        // add text
+        var feedbackDiv = document.createElement("div");
+        feedbackDiv.className = "endgame-text pt-4 column is-full";
+        feedbackDiv.innerHTML = "<p>Here are the foxes you've collected.</p>";
+        container.appendChild(feedbackDiv);
+    } else {
+        exists = false;
+
+        // add text
+        var feedbackDiv = document.createElement("div");
+        feedbackDiv.className = "endgame-text pt-4 column is-full";
+        feedbackDiv.innerHTML = "<p>There are no foxes in your collection.</p>";
+        container.appendChild(feedbackDiv);
+    };
+
+    // add elements to play again
+    // create div to contain select and button
+    var newGameDiv = document.createElement("div");
+    newGameDiv.className = "new-game column is-full my-1";
+    newGameDiv.innerHTML = "<p>Want to add to your collection? Start a new game!</p>";
+
+    // create label
+    var difficultyLabel = document.createElement("label");
+    difficultyLabel.classList.add('tag', 'is-large', 'mt-2');
+    difficultyLabel.setAttribute("for", "new-difficulty");
+    difficultyLabel.innerText = "Choose your difficulty:";
+    // add label to new game div
+    newGameDiv.appendChild(difficultyLabel);
+
+    // create select
+    let selectContainerDiv = document.createElement('div');
+    selectContainerDiv.classList.add("select", "is-multiple", "mt-2", "mx-2");
+    var selectDifficulty = document.createElement("select");
+    selectDifficulty.setAttribute("id", "new-difficulty");
+    selectDifficulty.setAttribute("name", "new-difficulty");
+    selectDifficulty.setAttribute("class", "difficulty");
+    selectDifficulty.innerHTML = "<option value='easy'>Easy</option><option value='medium'>Medium</option><option value='hard'>Hard</option><option value='random'>Random</option>"
+    // add select to new game div
+    selectContainerDiv.appendChild(selectDifficulty);
+    newGameDiv.appendChild(selectContainerDiv)
+
+    // create button
+    var newGameButton = document.createElement("button");
+    newGameButton.setAttribute("type", "btn");
+    newGameButton.setAttribute("id", "start-new");
+    newGameButton.setAttribute("class", "start button is-green mx-5 mt-2");
+    newGameButton.innerText = "New Game";
+    // add button to new game div
+    newGameDiv.appendChild(newGameButton);
+
+    // add new game div to the page
+    container.appendChild(newGameDiv);
+
+    if (exists) {
+        // if there's an array in localStorage, display the images in the array
+        var foxHut = JSON.parse(localStorage.getItem("foxHut"));
+
+        // add button to clear saved foxes
+        // create div container
+        var clearDiv = document.createElement("div");
+        clearDiv.className = "new-game column is-full";
+        clearDiv.innerHTML = "<p>Want to delete your collection and start over?</p>";
+        // create button and add to div
+        var clearButton = document.createElement("button");
+        clearButton.setAttribute("type", "btn");
+        clearButton.setAttribute("id", "clear-btn");
+        clearButton.setAttribute("class", "start button is-red mx-5 mt-2");
+        clearButton.innerText = "Clear Foxes";
+        clearDiv.appendChild(clearButton);
+        // add div to page
+        container.appendChild(clearDiv);
+
+        // create container for photos
+        let photoContainer = document.createElement("div");
+        photoContainer.className = "endgame-fox-photos columns is-multiline is-full";
+
+        for (let i = 0; i < foxHut.length; i++) {
+            // for each URL, create a div and an img
+            var foxPicUrl = foxHut[i];
+            // create div
+            var foxPicDiv = document.createElement("div");
+            foxPicDiv.className = "endgame-photo column is-one-quarter-desktop is-one-third-tablet mt-4"
+            // create img
+            var foxPic = document.createElement("img");
+            foxPic.src = foxPicUrl;
+            foxPic.className = "endgame-img";
+            foxPic.setAttribute("id", "photo of a fox");
+            // append img to div and div to container
+            foxPicDiv.appendChild(foxPic);
+            photoContainer.appendChild(foxPicDiv);
+        };
+
+        // add photo container to main container
+        container.appendChild(photoContainer);
+    };
+        // add main container to page
+        document.querySelector("main").appendChild(container);
+
+        // add listener for new game button
+        $("#start-new").on("click", function (event) {
+            var difficulty = $("#new-difficulty").val();
+            getQuestions(difficulty);
+        });
+
+        // add event listener for clear button
+        $("#clear-btn").on("click", function () {
+            clearStorage();
+            showMyFoxes();
+        });
+};
+
+var startGame = function () {
     // reset current question number
     currentQuestion = 0;
 
@@ -75,9 +198,6 @@ const startGame = () => {
 
     // clear main element
     $("main").html("");
-
-    // if New Game button exists, replace it with My Foxes button and add listener for My Foxes button
-    // IMPORTANT: add this code block later
 
     // load first question
     // create container div
@@ -387,33 +507,35 @@ var endGame = function () {
         // add failure text
         endgameTextDiv.innerHTML = "<p>Sorry, you didn't earn any foxes this time.</p>";
     };
-    
+
     //check localstorage for existing array
     if (localStorage.getItem("foxHut")) {
         //if in localstorage, get it and add button to display
-                //get array
-                var foxHut = JSON.parse(localStorage.getItem("foxHut"));
-                console.log(foxHut);
-                //add current array to it
-                foxHut.concat(earnedFoxes);
-                //store new array in local storage
-                localStorage.setItem("foxHut",JSON.stringify(foxHut));
-                //add text and btn
-                //createparagraph element and add to page 
-                var paragraph = document.createElement("p");
-                paragraph.innerHTML = "If you want to view collected foxes, please select button below.";
-                endgameTextDiv.appendChild(paragraph);
-                //create and style button and add to page
-                var button = document.createElement("button");
-                button.id = "my-foxes";
-                button.className = "start button";
-                button.setAttribute("type", "btn");
-                button.innerHTML = "Show My Foxes";
-                endgameTextDiv.appendChild(button);
-        } else {    
+        //get array
+        var foxHut = JSON.parse(localStorage.getItem("foxHut"));
+        //add current array to it
+        foxHut = foxHut.concat(earnedFoxes);
+        //store new array in local storage
+        localStorage.setItem("foxHut", JSON.stringify(foxHut));
+        //add text and btn
+        //createparagraph element and add to page 
+        var paragraph = document.createElement("p");
+        paragraph.className = "mt-4"
+        paragraph.innerHTML = "If you want to see all the foxes you've collected, click this button.";
+        endgameTextDiv.appendChild(paragraph);
+        //create and style button and add to page
+        var button = document.createElement("button");
+        button.id = "my-foxes";
+        button.className = "start button is-green my-2";
+        button.setAttribute("type", "btn");
+        button.innerHTML = "Show My Foxes";
+        endgameTextDiv.appendChild(button);
+
+    } else {
         //if theres nothing in localstorage, add current array to localstorag
         var foxHut = earnedFoxes
-        localStorage.setItem("foxHut",JSON.stringify(foxHut)); }
+        localStorage.setItem("foxHut", JSON.stringify(foxHut));
+    };
 
     // append endgame text div to endgame container
     endgameContainerDiv.appendChild(endgameTextDiv);
@@ -489,6 +611,17 @@ var endGame = function () {
         var difficulty = $("#new-difficulty").val();
         getQuestions(difficulty);
     });
+
+    // add listener for Show My Foxes button
+    $("#my-foxes").on("click", showMyFoxes);
+};
+
+// clear stored foxes
+var clearStorage = function () {
+    if (localStorage.getItem("foxHut")) {
+        // if there's a stored array in localStorage, delete it
+        localStorage.removeItem("foxHut");
+    };
 };
 
 // adding this fixes the bug of the first correct answer loading an undefined URL
@@ -499,3 +632,6 @@ $(".start").on("click", function (event) {
     var difficulty = $("#difficulty").val();
     getQuestions(difficulty);
 });
+
+// listener for My Foxes button in header
+showFoxBtn.addEventListener('click', showMyFoxes);

@@ -4,6 +4,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 html,
 body {
   height: 100%;
@@ -36,6 +37,20 @@ body {
   border-radius: 4px;
 }
 
+/* Footer styling */
+footer {
+  background: #090800;
+  width: 100%;
+  padding: 40px 35px;
+}
+
+footer h2 {
+  display: inline;
+  color: white;
+  font-size: 1rem;
+  margin: 0;
+}
+
 /* Main area styling */
 /* Home screen styling */
 #main {
@@ -44,6 +59,11 @@ body {
 
 .home-photo {
   align-self: center;
+}
+
+.home-photo-mobile {
+  display: none;
+  margin-top: 15px;
 }
 
 .start-game {
@@ -109,8 +129,6 @@ select option {
 /* Utility styling */
 .tag {
   padding: 25px 15px;
-  color: #ffffff;
-  background-color: #4a4a4a;
 }
 
 .is-green {
@@ -140,21 +158,64 @@ select option {
 .notification {
   max-width: 1000px;
 }
-footer {
-  background: #090800;
-  width: 100%;
-  padding: 40px 35px;
-}
-footer h2 {
-  display: inline;
-  color: #fbfeff;
-  font-size: 30px;
+
+.full-height {
+  height: 100vh;
   margin: 0;
 }
-footer div {
-  float: right;
-  text-align: right;
-}
-footer a {
-  color: #f0f5f8;
+
+/* Media query for mobile */
+@media only screen and (max-width: 550px) {
+  body {
+    font-size: 1rem;
+  }
+  
+  #logo {
+    font-size: 2rem;
+    display: block;
+  }
+
+  .header-btn {
+    display: block;
+    margin: 6px auto 10px auto;
+    font-size: 1rem;
+  }
+
+  .hero-body {
+    display: block;
+    padding: 0;
+  }
+
+  .home-photo {
+    display: none;
+  }
+
+  .home-photo-mobile {
+    display: block;
+  }
+
+  .message-body {
+    padding: 15px 20px;
+  }
+
+  .question {
+    font-size: 1rem;
+  }
+
+  .question-container .tag {
+    height: auto !important;
+    white-space: unset !important;
+    /* these should let the tag text wrap */
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .choice {
+    display: block;
+    margin-top: 20px;
+  }
+
+  .answer-choices:first-child {
+    margin-top: 0;
+  }
 }
