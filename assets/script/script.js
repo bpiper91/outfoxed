@@ -1,9 +1,6 @@
-// Brett's Note: search for "IMPORTANT" to find unfinished/hard-coded sections that will need to be changed
-
 // Open Trivia Database API request variables
 const openTdbUrl = "https://opentdb.com/api.php?";
 const numQuestions = 6; // number of questions to request from Open Trivia Database
-// IMPORTANT: set numQuestions to 10 (or whatever) when finished testing
 const questCategory = 27 // 27 is the animals category
 
 // quiz questions
@@ -18,9 +15,8 @@ let pictureNum = [];
 // Element to use for modal popups. Append data to this for modal popups
 let modalData = document.createElement('div')
 let modal = document.getElementById('modal') // add 'is-active' to class list to open modal
-let modalContent = document.getElementById('modal-content')
+let modalContent = document.getElementById('modal-content') // append modalData to this
 var showFoxBtn = document.getElementById('header-btn')
-// append modalData to this
 
 // get new questions from Open Trivia Database based on selected difficulty
 const getQuestions = (difficulty) => {
@@ -68,7 +64,7 @@ const getQuestions = (difficulty) => {
         })
 }
 
-// Important!!! btn header when its click itll run function
+// btn header when its click itll run function
 var showMyFoxes = function () {
     //clear mainelement
     document.querySelector("main").innerHTML = "";
