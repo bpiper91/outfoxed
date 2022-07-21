@@ -8,7 +8,7 @@
 
 ---
 
-![Image of application](./assets/images/example-image.png)
+![Home screen on a desktop](./assets/images/home-screen.PNG "Home screen on a desktop")
 
 ---
 
